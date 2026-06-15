@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ONDA Replay — Help</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #1a1a1a;
+      color: #e8e8e8;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #008B82;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+    header p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      margin-top: 2px;
+    }
+
+    #search-bar {
+      padding: 12px 24px;
+      background: #222;
+      border-bottom: 1px solid #333;
+    }
+    #search-bar input {
+      width: 100%;
+      max-width: 500px;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid #444;
+      background: #2a2a2a;
+      color: #e8e8e8;
+      font-size: 14px;
+      outline: none;
+    }
+    #search-bar input:focus { border-color: #008B82; }
+
+    #layout {
+      display: flex;
+      min-height: calc(100vh - 110px);
+    }
+
+    /* ── Tag sidebar ── */
+    #tag-panel {
+      width: 180px;
+      min-width: 180px;
+      background: #1e1e1e;
+      border-right: 1px solid #333;
+      padding: 16px 12px;
+      overflow-y: auto;
+    }
+    #tag-panel h2 {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .tag-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 6px 10px;
+      margin-bottom: 4px;
+      border-radius: 6px;
+      border: none;
+      background: transparent;
+      color: #bbb;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .tag-btn:hover { background: #2a2a2a; color: #fff; }
+    .tag-btn.active { background: #008B82; color: #fff; }
+    .tag-btn .count {
+      float: right;
+      font-size: 11px;
+      color: #666;
+    }
+    .tag-btn.active .count { color: rgba(255,255,255,0.7); }
+
+    /* ── Cards ── */
+    #card-panel {
+      flex: 1;
+      padding: 20px 24px;
+      overflow-y: auto;
+    }
+
+    .help-card {
+      background: #252525;
+      border: 1px solid #333;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .card-body {
+      display: flex;
+      gap: 0;
+    }
+
+    .card-screenshot {
+      width: 220px;
+      min-width: 220px;
+      background: #1a1a1a;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 16px;
+    }
+    .card-screenshot img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #333;
+    }
+    .card-screenshot .no-image {
+      width: 100%;
+      aspect-ratio: 9/16;
+      background: #1e1e1e;
+      border-radius: 8px;
+      border: 2px dashed #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #444;
+      font-size: 12px;
+      text-align: center;
+    }
+
+    .card-content {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .card-screen {
+      font-size: 11px;
+      color: #008B82;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .card-summary {
+      font-size: 13px;
+      color: #aaa;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .callout-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .callout-table th {
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #555;
+      padding: 4px 8px 8px 0;
+      border-bottom: 1px solid #333;
+    }
+    .callout-table td {
+      padding: 8px 8px 8px 0;
+      border-bottom: 1px solid #2a2a2a;
+      vertical-align: top;
+      color: #ccc;
+    }
+    .callout-table tr:last-child td { border-bottom: none; }
+    .callout-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #008B82;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .callout-label {
+      font-weight: 600;
+      color: #ddd;
+    }
+
+    .card-tags {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .card-tag {
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: #2a2a2a;
+      color: #888;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    .card-tag:hover { background: #008B82; color: #fff; }
+
+    #no-results {
+      text-align: center;
+      color: #555;
+      padding: 60px 20px;
+      font-size: 15px;
+      display: none;
+    }
+
+    /* ── Context banner (when ctx= param is active) ── */
+    #ctx-banner {
+      display: none;
+      background: #008B82;
+      color: #fff;
+      padding: 8px 24px;
+      font-size: 13px;
+    }
+    #ctx-banner a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: underline;
+      cursor: pointer;
+      margin-left: 12px;
+    }
+
+    @media (max-width: 640px) {
+      #layout { flex-direction: column; }
+      #tag-panel { width: 100%; border-right: none; border-bottom: 1px solid #333;
+                   display: flex; flex-wrap: wrap; gap: 6px; padding: 12px; }
+      #tag-panel h2 { width: 100%; }
+      .tag-btn { width: auto; }
+      .card-body { flex-direction: column; }
+      .card-screenshot { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>ONDA Replay — Help</h1>
+    <p>Tap a topic on the left or search above</p>
+  </div>
+</header>
+
+<div id="ctx-banner">
+  Showing help for: <strong id="ctx-label"></strong>
+  <a onclick="clearCtx()">Show all</a>
+</div>
+
+<div id="search-bar">
+  <input type="text" id="search" placeholder="Search help articles…" oninput="render()">
+</div>
+
+<div id="layout">
+  <div id="tag-panel">
+    <h2>Topics</h2>
+    <div id="tags"></div>
+  </div>
+  <div id="card-panel">
+    <div id="cards"></div>
+    <div id="no-results">No articles found for that search.</div>
+  </div>
+</div>
+
+<script>
+// ── Help article data ──────────────────────────────────────────────────────
+const ARTICLES = [
+  {
+    id: 1,
+    screen: "Recording Studio",
+    title: "Recording Studio — Overview",
+    tags: ["recording", "studio", "timer", "teleprompter", "pause", "stop"],
+    image: "help-images/record-screen.png",
+    callouts: [
+      { n: 1, label: "Back arrow",   text: "Exit Recording Studio and return to your catalog" },
+      { n: 2, label: "Ideas button", text: "Tips, help, and links to the full guide at ondareplay.com" },
+      { n: 3, label: "Stop",         text: "End the recording and move to naming your session" },
+      { n: 4, label: "Record",       text: "Tap to begin — audio captures immediately" },
+      { n: 5, label: "Pause",        text: "Freeze the recording; tap Record again to resume" },
+      { n: 6, label: "Timer",        text: "Set a duration — recording stops automatically" },
+      { n: 7, label: "Canvas",       text: "Your teleprompter text appears here; blank until you load a script" },
+    ],
+    summary: "The Recording Studio is where you create a new session from scratch. First-time users often arrive here after importing a shared .onda file — recording your own is the next step. Everything else — pausing, stopping, setting a timer — is available the moment recording begins."
+  },
+  {
+    id: 2,
+    screen: "Recording Studio",
+    title: "Marking key moments while recording",
+    tags: ["recording", "markers", "index", "navigate"],
+    image: "help-images/record-screen-active.png",
+    callouts: [
+      { n: 1, label: "Mark this moment", text: "Drop a marker at this point in the audio — creates a named entry in your session index" },
+      { n: 2, label: "Marker count",     text: "Shows how many moments you've marked so far in this session" },
+    ],
+    summary: "Markers are forward-thinking. Tap Mark this moment while something important is being said — before you know the full shape of the session. Each marker becomes a navigable entry in the transcript index later, letting you jump directly to that point in the audio."
+  },
+  {
+    id: 3,
+    screen: "Recording Studio",
+    title: "Stopping a recording",
+    tags: ["recording", "stop", "playback", "discard"],
+    image: "help-images/record-screen-stop.png",
+    callouts: [
+      { n: 1, label: "Stop",         text: "Confirms the stop — recording is saved and cannot be undone" },
+      { n: 2, label: "Keep Recording", text: "Dismiss this dialog and continue recording" },
+      { n: 3, label: "Hear it",      text: "Play back what you just recorded before deciding anything else" },
+      { n: 4, label: "Record again", text: "Discard this take and start fresh" },
+    ],
+    summary: "You tapped Stop but nothing is final yet. This is your last chance to listen before committing — or start over if the take wasn't what you wanted."
+  },
+  {
+    id: 4,
+    screen: "Recording Studio",
+    title: "Naming and saving a recording",
+    tags: ["recording", "save", "label", "name"],
+    image: "help-images/record-screen-save.png",
+    callouts: [
+      { n: 1, label: "Saved as",  text: "The auto-generated name — day, date, and time of the recording" },
+      { n: 2, label: "Date tile", text: "Color is unique to the day of the week" },
+      { n: 3, label: "Confirm",   text: "Accept the default name and save to your catalog" },
+      { n: 4, label: "Customize", text: "Add a title, notes, or tags before saving" },
+      { n: 5, label: "Discard",   text: "Delete this recording permanently" },
+    ],
+    summary: "Every recording gets a name automatically — you never lose a session because you forgot to title it. Confirm to save instantly, or Customize to add context before it lands in your catalog."
+  },
+  {
+    id: 5,
+    screen: "Catalog",
+    title: "Catalog — Overview",
+    tags: ["catalog", "cover", "session", "tiles"],
+    image: "help-images/catalog-screen.png",
+    callouts: [
+      { n: 1, label: "ⓘ button",         text: "About ONDA Replay — version info and dev mode access" },
+      { n: 2, label: "Photo cover card",  text: "When a cover image exists, it replaces the date tile — tap to view full screen" },
+    ],
+    summary: "The Catalog is your home screen — every recording you've made or imported appears here as a tile. Color tiles show the day and time recorded. Photo tiles show a cover image you've assigned. Tap any tile to open it."
+  },
+  {
+    id: 6,
+    screen: "Sleeve Editor",
+    title: "Sleeve Editor — Cover and label",
+    tags: ["sleeve", "cover", "label", "notes", "save", "share"],
+    image: "help-images/sleeve-editor-1.png",
+    callouts: [
+      { n: 1, label: "Save",      text: "Confirms label, notes, cover image, and tags — saves to catalog" },
+      { n: 2, label: "Take / Pick", text: "Take a new cover photo or choose one from your library" },
+      { n: 3, label: "Label",     text: "Short name for this recording — auto-filled with day and time, fully editable" },
+      { n: 4, label: "Notes",     text: "Your own description in plain language — used for search and tag generation" },
+      { n: 5, label: "Edit (Tags)", text: "Open the tag editor to add or manage tags manually" },
+    ],
+    summary: "Every recording gets a name and a cover automatically. This screen is your chance to add context — a label, a description, a photo — before it lands in your catalog. The words you type in Notes become your tags."
+  },
+  {
+    id: 7,
+    screen: "Sleeve Editor",
+    title: "Sleeve Editor — Tags",
+    tags: ["sleeve", "tags", "merge", "notes", "vocabulary"],
+    image: "help-images/sleeve-editor-2.png",
+    callouts: [
+      { n: 1, label: "Notes → tags", text: "The words you type in Notes become tag candidates — your vocabulary, not the app's" },
+      { n: 2, label: "Merge",        text: "Select two tags and tap Merge to combine into a phrase — e.g. 'natural' + 'language' → 'natural language'" },
+      { n: 3, label: "Tag chips",    text: "Yellow = selected and active; white = available; tap × to ignore" },
+    ],
+    summary: "Tags come from your own words. Type a description in Notes — the app reads it and suggests tags. You decide what sticks. Merge turns two single words into a phrase so multi-word ideas stay together as one searchable unit."
+  },
+];
+
+// ── State ──────────────────────────────────────────────────────────────────
+let activeTag = null;
+
+// ── Boot ───────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(window.location.search);
+  const ctx = params.get('ctx');
+  if (ctx) {
+    activeTag = ctx;
+    document.getElementById('ctx-banner').style.display = 'block';
+    document.getElementById('ctx-label').textContent = ctx;
+  }
+  buildTags();
+  render();
+});
+
+function buildTags() {
+  const counts = {};
+  ARTICLES.forEach(a => a.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const el = document.getElementById('tags');
+  el.innerHTML = `<button class="tag-btn ${!activeTag ? 'active' : ''}" onclick="setTag(null)">All <span class="count">${ARTICLES.length}</span></button>`;
+  sorted.forEach(([tag, count]) => {
+    el.innerHTML += `<button class="tag-btn ${activeTag === tag ? 'active' : ''}" onclick="setTag('${tag}')">${tag} <span class="count">${count}</span></button>`;
+  });
+}
+
+function setTag(tag) {
+  activeTag = tag;
+  if (!tag) clearCtx();
+  buildTags();
+  render();
+}
+
+function clearCtx() {
+  activeTag = null;
+  document.getElementById('ctx-banner').style.display = 'none';
+  window.history.replaceState({}, '', window.location.pathname);
+  buildTags();
+  render();
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  let filtered = ARTICLES;
+  if (activeTag) filtered = filtered.filter(a => a.tags.includes(activeTag));
+  if (q) filtered = filtered.filter(a =>
+    a.title.toLowerCase().includes(q) ||
+    a.summary.toLowerCase().includes(q) ||
+    a.callouts.some(c => c.label.toLowerCase().includes(q) || c.text.toLowerCase().includes(q))
+  );
+
+  const el = document.getElementById('cards');
+  const none = document.getElementById('no-results');
+  if (!filtered.length) { el.innerHTML = ''; none.style.display = 'block'; return; }
+  none.style.display = 'none';
+
+  el.innerHTML = filtered.map(a => `
+    <div class="help-card" id="article-${a.id}">
+      <div class="card-body">
+        <div class="card-screenshot">
+          ${a.image
+            ? `<img src="${a.image}" alt="${a.title}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Screenshot<br>coming soon</div>'">`
+            : `<div class="no-image">Screenshot<br>coming soon</div>`}
+        </div>
+        <div class="card-content">
+          <div class="card-screen">${a.screen}</div>
+          <div class="card-title">${a.title}</div>
+          <p class="card-summary">${a.summary}</p>
+          <table class="callout-table">
+            <tr><th>#</th><th>Control</th><th>Description</th></tr>
+            ${a.callouts.map(c => `
+              <tr>
+                <td><span class="callout-num">${c.n}</span></td>
+                <td class="callout-label">${c.label}</td>
+                <td>${c.text}</td>
+              </tr>
+            `).join('')}
+          </table>
+          <div class="card-tags">
+            ${a.tags.map(t => `<span class="card-tag" onclick="setTag('${t}')">${t}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>
