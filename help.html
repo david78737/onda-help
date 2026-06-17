@@ -305,12 +305,12 @@
     }
 
     @media (max-width: 640px) {
-      #layout { flex-direction: column; }
-      #tag-panel { width: 100%; border-right: none; border-bottom: 1px solid #333;
-                   display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; }
-      .sidebar-section { width: 100%; margin: 6px 0 4px; }
-      .tag-btn { width: auto; padding: 4px 10px; }
-      #card-panel { padding: 10px 12px; }
+      #tag-panel { width: 120px; min-width: 120px; padding: 10px 8px; }
+      .tag-btn { font-size: 11px; padding: 5px 8px; }
+      .tag-btn .count { font-size: 10px; }
+      #card-panel { padding: 10px 8px; }
+      .card-header { padding: 10px 10px; }
+      .card-title { font-size: 13px; }
       .card-body { flex-direction: column; }
       .card-screenshot { width: 100%; min-width: unset; }
     }
