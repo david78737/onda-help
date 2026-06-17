@@ -9,13 +9,13 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #1a1a1a;
-      color: #e8e8e8;
+      background: #F0F0F0;
+      color: #333333;
       min-height: 100vh;
     }
 
     header {
-      background: #008B82;
+      background: #009688;
       padding: 16px 24px;
       display: flex;
       align-items: center;
@@ -35,21 +35,21 @@
 
     #search-bar {
       padding: 12px 24px;
-      background: #222;
-      border-bottom: 1px solid #333;
+      background: #E7E7E7;
+      border-bottom: 1px solid #D0D0D0;
     }
     #search-bar input {
       width: 100%;
       max-width: 500px;
       padding: 8px 14px;
       border-radius: 20px;
-      border: 1px solid #444;
-      background: #2a2a2a;
-      color: #e8e8e8;
+      border: 1px solid #C0C0C0;
+      background: #FFFFFF;
+      color: #333333;
       font-size: 14px;
       outline: none;
     }
-    #search-bar input:focus { border-color: #008B82; }
+    #search-bar input:focus { border-color: #009688; }
 
     #layout {
       display: flex;
@@ -60,8 +60,8 @@
     #tag-panel {
       width: 180px;
       min-width: 180px;
-      background: #1e1e1e;
-      border-right: 1px solid #333;
+      background: #6D7D7D;
+      border-right: 1px solid #5a6a6a;
       padding: 16px 12px;
       overflow-y: auto;
     }
@@ -69,7 +69,7 @@
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #666;
+      color: rgba(255,255,255,0.5);
       margin-bottom: 10px;
     }
     .tag-btn {
@@ -81,27 +81,27 @@
       border-radius: 6px;
       border: none;
       background: transparent;
-      color: #bbb;
+      color: rgba(255,255,255,0.75);
       font-size: 13px;
       cursor: pointer;
       transition: background 0.15s;
     }
-    .tag-btn:hover { background: #2a2a2a; color: #fff; }
-    .tag-btn.active { background: #008B82; color: #fff; }
+    .tag-btn:hover { background: rgba(0,0,0,0.15); color: #fff; }
+    .tag-btn.active { background: #009688; color: #fff; }
     .tag-btn .count {
       float: right;
       font-size: 11px;
-      color: #666;
+      color: rgba(255,255,255,0.45);
     }
     .tag-btn.active .count { color: rgba(255,255,255,0.7); }
     .sidebar-section {
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #555;
+      color: rgba(255,255,255,0.4);
       margin: 14px 0 6px;
       padding-bottom: 4px;
-      border-bottom: 1px solid #2a2a2a;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
     }
     .sidebar-section:first-child { margin-top: 0; }
 
@@ -113,14 +113,14 @@
     }
 
     .help-card {
-      background: #252525;
-      border: 1px solid #333;
+      background: #FFFFFF;
+      border: 1px solid #DCDCDC;
       border-radius: 10px;
       margin-bottom: 8px;
       overflow: hidden;
       cursor: pointer;
     }
-    .help-card:hover { border-color: #008B82; }
+    .help-card:hover { border-color: #009688; box-shadow: 0 1px 4px rgba(0,150,136,0.12); }
 
     .card-header {
       display: flex;
@@ -129,24 +129,24 @@
       gap: 10px;
     }
     .card-header-text { flex: 1; }
-    .card-chevron { font-size: 12px; color: #555; flex-shrink: 0; }
+    .card-chevron { font-size: 12px; color: #AAAAAA; flex-shrink: 0; }
 
     .card-title {
       font-size: 14px;
       font-weight: 700;
-      color: #fff;
+      color: #222222;
       margin-bottom: 2px;
     }
     .card-screen {
       font-size: 10px;
-      color: #008B82;
+      color: #009688;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     #no-results {
       text-align: center;
-      color: #555;
+      color: #888888;
       padding: 60px 20px;
       font-size: 15px;
       display: none;
@@ -168,7 +168,7 @@
       left: 0;
       right: 0;
       height: 75vh;
-      background: #1e1e1e;
+      background: #FFFFFF;
       border-radius: 16px 16px 0 0;
       z-index: 201;
       transform: translateY(100%);
@@ -176,6 +176,7 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.18);
     }
     #bottom-sheet.open { transform: translateY(0); }
 
@@ -190,18 +191,18 @@
     #sheet-handle-bar div {
       width: 36px;
       height: 4px;
-      background: #444;
+      background: #CCCCCC;
       border-radius: 2px;
     }
 
     #sheet-header {
       flex-shrink: 0;
       padding: 0 16px 10px;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #E8E8E8;
     }
     #sheet-screen {
       font-size: 10px;
-      color: #008B82;
+      color: #009688;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       margin-bottom: 2px;
@@ -209,7 +210,7 @@
     #sheet-title {
       font-size: 16px;
       font-weight: 700;
-      color: #fff;
+      color: #222222;
     }
 
     #sheet-body {
@@ -228,20 +229,20 @@
       width: 90px;
       flex-shrink: 0;
       border-radius: 8px;
-      border: 1px solid #333;
+      border: 1px solid #DCDCDC;
       cursor: zoom-in;
     }
     #sheet-thumb:hover { opacity: 0.85; }
     #sheet-thumb-hint {
       font-size: 10px;
-      color: #555;
+      color: #888888;
       text-align: center;
       margin-top: 4px;
     }
     #sheet-summary {
       flex: 1;
       font-size: 13px;
-      color: #aaa;
+      color: #555555;
       line-height: 1.6;
     }
 
@@ -255,15 +256,15 @@
       font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #555;
+      color: #888888;
       padding: 4px 8px 8px 0;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #E0E0E0;
     }
     .callout-table td {
       padding: 7px 8px 7px 0;
-      border-bottom: 1px solid #2a2a2a;
+      border-bottom: 1px solid #F0F0F0;
       vertical-align: top;
-      color: #ccc;
+      color: #444444;
     }
     .callout-table tr:last-child td { border-bottom: none; }
     .callout-num {
@@ -273,13 +274,13 @@
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: #008B82;
+      background: #009688;
       color: #fff;
       font-size: 11px;
       font-weight: 700;
       flex-shrink: 0;
     }
-    .callout-label { font-weight: 600; color: #ddd; }
+    .callout-label { font-weight: 600; color: #222222; }
 
     #sheet-tags {
       flex-shrink: 0;
@@ -287,17 +288,17 @@
       flex-wrap: wrap;
       gap: 6px;
       padding: 10px 16px 16px;
-      border-top: 1px solid #2a2a2a;
+      border-top: 1px solid #F0F0F0;
     }
     .card-tag {
       padding: 3px 10px;
       border-radius: 12px;
-      background: #2a2a2a;
-      color: #888;
+      background: #FFD862;
+      color: #555555;
       font-size: 11px;
       cursor: pointer;
     }
-    .card-tag:hover { background: #008B82; color: #fff; }
+    .card-tag:hover { background: #009688; color: #fff; }
 
     /* ── Lightbox (above sheet) ── */
     #lightbox {
