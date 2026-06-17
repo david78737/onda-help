@@ -94,6 +94,16 @@
       color: #666;
     }
     .tag-btn.active .count { color: rgba(255,255,255,0.7); }
+    .sidebar-section {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #555;
+      margin: 14px 0 6px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+    .sidebar-section:first-child { margin-top: 0; }
 
     /* ── Cards ── */
     #card-panel {
@@ -277,8 +287,7 @@
 
 <div id="layout">
   <div id="tag-panel">
-    <h2>Topics</h2>
-    <div id="tags"></div>
+    <div id="sidebar"></div>
   </div>
   <div id="card-panel">
     <div id="cards"></div>
@@ -391,49 +400,71 @@ const ARTICLES = [
 
 // ── State ──────────────────────────────────────────────────────────────────
 let activeTag = null;
+let activeScreen = null;
 
 // ── Boot ───────────────────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
   const params = new URLSearchParams(window.location.search);
   const ctx = params.get('ctx');
   if (ctx) {
-    activeTag = ctx;
+    activeScreen = ctx;
     document.getElementById('ctx-banner').style.display = 'block';
     document.getElementById('ctx-label').textContent = ctx;
   }
-  buildTags();
+  buildSidebar();
   render();
 });
 
-function buildTags() {
-  const counts = {};
-  ARTICLES.forEach(a => a.tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; }));
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-  const el = document.getElementById('tags');
-  el.innerHTML = `<button class="tag-btn ${!activeTag ? 'active' : ''}" onclick="setTag(null)">All <span class="count">${ARTICLES.length}</span></button>`;
-  sorted.forEach(([tag, count]) => {
-    el.innerHTML += `<button class="tag-btn ${activeTag === tag ? 'active' : ''}" onclick="setTag('${tag}')">${tag} <span class="count">${count}</span></button>`;
+function buildSidebar() {
+  const screens = [...new Set(ARTICLES.map(a => a.screen))];
+  const screenBase = activeScreen ? ARTICLES.filter(a => a.screen === activeScreen) : ARTICLES;
+
+  const tagCounts = {};
+  screenBase.forEach(a => a.tags.forEach(t => { tagCounts[t] = (tagCounts[t] || 0) + 1; }));
+  const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+
+  let html = `<div class="sidebar-section">Screens</div>`;
+  html += `<button class="tag-btn ${!activeScreen ? 'active' : ''}" onclick="setScreen(null)">All <span class="count">${ARTICLES.length}</span></button>`;
+  screens.forEach(s => {
+    const cnt = ARTICLES.filter(a => a.screen === s).length;
+    html += `<button class="tag-btn ${activeScreen === s ? 'active' : ''}" onclick="setScreen('${s}')">${s} <span class="count">${cnt}</span></button>`;
   });
+
+  html += `<div class="sidebar-section">Topics</div>`;
+  sortedTags.forEach(([tag, count]) => {
+    html += `<button class="tag-btn ${activeTag === tag ? 'active' : ''}" onclick="setTag('${tag}')">${tag} <span class="count">${count}</span></button>`;
+  });
+
+  document.getElementById('sidebar').innerHTML = html;
+}
+
+function setScreen(screen) {
+  activeScreen = screen;
+  activeTag = null;
+  if (!screen) clearCtx();
+  buildSidebar();
+  render();
 }
 
 function setTag(tag) {
   activeTag = tag;
-  if (!tag) clearCtx();
-  buildTags();
+  buildSidebar();
   render();
 }
 
 function clearCtx() {
+  activeScreen = null;
   activeTag = null;
   document.getElementById('ctx-banner').style.display = 'none';
   window.history.replaceState({}, '', window.location.pathname);
-  buildTags();
+  buildSidebar();
   render();
 }
 
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
   let filtered = ARTICLES;
+  if (activeScreen) filtered = filtered.filter(a => a.screen === activeScreen);
   if (activeTag) filtered = filtered.filter(a => a.tags.includes(activeTag));
   if (q) filtered = filtered.filter(a =>
     a.title.toLowerCase().includes(q) ||
