@@ -108,37 +108,73 @@
     /* ── Cards ── */
     #card-panel {
       flex: 1;
-      padding: 20px 24px;
+      padding: 12px 16px;
       overflow-y: auto;
     }
 
+    /* Collapsed tile */
     .help-card {
       background: #252525;
       border: 1px solid #333;
       border-radius: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 8px;
       overflow: hidden;
+      cursor: pointer;
+    }
+    .help-card:hover { border-color: #008B82; }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      gap: 10px;
+    }
+    .card-header-text { flex: 1; }
+    .card-chevron {
+      font-size: 14px;
+      color: #555;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .help-card.open .card-chevron { transform: rotate(90deg); color: #008B82; }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+    .card-screen {
+      font-size: 10px;
+      color: #008B82;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
 
+    /* Expanded body */
     .card-body {
-      display: flex;
-      gap: 0;
+      display: none;
+      border-top: 1px solid #333;
     }
+    .help-card.open .card-body { display: flex; }
 
     .card-screenshot {
-      width: 220px;
-      min-width: 220px;
+      width: 180px;
+      min-width: 180px;
       background: #1a1a1a;
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      padding: 16px;
+      padding: 12px;
     }
     .card-screenshot img {
       width: 100%;
       border-radius: 8px;
       border: 1px solid #333;
+      cursor: zoom-in;
+      transition: opacity 0.15s;
     }
+    .card-screenshot img:hover { opacity: 0.85; }
     .card-screenshot .no-image {
       width: 100%;
       aspect-ratio: 9/16;
@@ -149,33 +185,19 @@
       align-items: center;
       justify-content: center;
       color: #444;
-      font-size: 12px;
+      font-size: 11px;
       text-align: center;
     }
 
     .card-content {
       flex: 1;
-      padding: 20px;
-    }
-
-    .card-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: #fff;
-      margin-bottom: 4px;
-    }
-    .card-screen {
-      font-size: 11px;
-      color: #008B82;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 12px;
+      padding: 16px;
     }
     .card-summary {
       font-size: 13px;
       color: #aaa;
       line-height: 1.6;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .callout-table {
@@ -185,7 +207,7 @@
     }
     .callout-table th {
       text-align: left;
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       color: #555;
@@ -193,7 +215,7 @@
       border-bottom: 1px solid #333;
     }
     .callout-table td {
-      padding: 8px 8px 8px 0;
+      padding: 7px 8px 7px 0;
       border-bottom: 1px solid #2a2a2a;
       vertical-align: top;
       color: #ccc;
@@ -212,13 +234,10 @@
       font-weight: 700;
       flex-shrink: 0;
     }
-    .callout-label {
-      font-weight: 600;
-      color: #ddd;
-    }
+    .callout-label { font-weight: 600; color: #ddd; }
 
     .card-tags {
-      margin-top: 14px;
+      margin-top: 12px;
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
@@ -241,6 +260,35 @@
       display: none;
     }
 
+    /* ── Lightbox ── */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img {
+      max-width: 92vw;
+      max-height: 92vh;
+      border-radius: 8px;
+      object-fit: contain;
+      touch-action: pinch-zoom;
+    }
+    #lightbox-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      color: #fff;
+      font-size: 28px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
     /* ── Context banner (when ctx= param is active) ── */
     #ctx-banner {
       display: none;
@@ -259,11 +307,12 @@
     @media (max-width: 640px) {
       #layout { flex-direction: column; }
       #tag-panel { width: 100%; border-right: none; border-bottom: 1px solid #333;
-                   display: flex; flex-wrap: wrap; gap: 6px; padding: 12px; }
-      #tag-panel h2 { width: 100%; }
-      .tag-btn { width: auto; }
+                   display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 12px; }
+      .sidebar-section { width: 100%; margin: 6px 0 4px; }
+      .tag-btn { width: auto; padding: 4px 10px; }
+      #card-panel { padding: 10px 12px; }
       .card-body { flex-direction: column; }
-      .card-screenshot { width: 100%; }
+      .card-screenshot { width: 100%; min-width: unset; }
     }
   </style>
 </head>
@@ -293,6 +342,11 @@
     <div id="cards"></div>
     <div id="no-results">No articles found for that search.</div>
   </div>
+</div>
+
+<div id="lightbox" onclick="closeLightbox()">
+  <span id="lightbox-close" onclick="closeLightbox()">✕</span>
+  <img id="lightbox-img" src="" alt="">
 </div>
 
 <script>
@@ -478,16 +532,23 @@ function render() {
   none.style.display = 'none';
 
   el.innerHTML = filtered.map(a => `
-    <div class="help-card" id="article-${a.id}">
+    <div class="help-card" id="article-${a.id}" onclick="toggleCard(${a.id}, event)">
+      <div class="card-header">
+        <div class="card-header-text">
+          <div class="card-screen">${a.screen}</div>
+          <div class="card-title">${a.title}</div>
+        </div>
+        <span class="card-chevron">▶</span>
+      </div>
       <div class="card-body">
         <div class="card-screenshot">
           ${a.image
-            ? `<img src="${a.image}" alt="${a.title}" onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Screenshot<br>coming soon</div>'">`
+            ? `<img src="${a.image}" alt="${a.title}"
+                onclick="openLightbox(event, '${a.image}')"
+                onerror="this.parentElement.innerHTML='<div class=\\'no-image\\'>Screenshot<br>coming soon</div>'">`
             : `<div class="no-image">Screenshot<br>coming soon</div>`}
         </div>
         <div class="card-content">
-          <div class="card-screen">${a.screen}</div>
-          <div class="card-title">${a.title}</div>
           <p class="card-summary">${a.summary}</p>
           <table class="callout-table">
             <tr><th>#</th><th>Control</th><th>Description</th></tr>
@@ -506,6 +567,21 @@ function render() {
       </div>
     </div>
   `).join('');
+}
+
+function toggleCard(id, e) {
+  const card = document.getElementById('article-' + id);
+  card.classList.toggle('open');
+}
+
+function openLightbox(e, src) {
+  e.stopPropagation();
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
 }
 </script>
 </body>
