@@ -232,6 +232,12 @@
       cursor: zoom-in;
     }
     #sheet-thumb:hover { opacity: 0.85; }
+    #sheet-thumb-hint {
+      font-size: 10px;
+      color: #555;
+      text-align: center;
+      margin-top: 4px;
+    }
     #sheet-summary {
       flex: 1;
       font-size: 13px;
@@ -386,7 +392,10 @@
   </div>
   <div id="sheet-body">
     <div id="sheet-thumb-row">
-      <img id="sheet-thumb" src="" alt="" onclick="openLightbox(event, '')">
+      <div>
+        <img id="sheet-thumb" src="" alt="" onclick="openLightbox(event, '')">
+        <div id="sheet-thumb-hint">Tap to expand</div>
+      </div>
       <div id="sheet-summary"></div>
     </div>
     <table class="callout-table" id="sheet-callouts">
