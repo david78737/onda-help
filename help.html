@@ -601,6 +601,41 @@ const ARTICLES = [
     ],
     summary: "The .onda bundle is the recommended way to share — audio, transcript, cover, tags, label, and notes all travel together in one file. The recipient opens it in Replay and gets the full experience.\n\nFor large files (over 25MB), email and Messages may not work. Use Google Drive or iCloud Drive instead: tap Share in Replay, save to Files, then share the link from Drive."
   },
+
+  {
+    id: 15,
+    screen: "Sleeve",
+    title: "Editing a recording's sleeve",
+    tags: ["label", "notes", "tags", "cover", "photo", "merge", "album", "slides", "sleeve", "edit"],
+    image: "help-images/sleeve-edit-1-no-photo.png",
+    callouts: [
+      { n: 1, label: "Delete",        text: "Permanently deletes this recording. This cannot be undone." },
+      { n: 2, label: "Re-transcribe", text: "Send the audio back to Whisper for a fresh transcription. Uses transcription time from your tank." },
+      { n: 3, label: "Save",          text: "Save all changes to label, notes, tags, cover image, and album." },
+      { n: 4, label: "Take",          text: "Open the camera and take a new photo right now." },
+      { n: 5, label: "Pick",          text: "Choose an existing photo from your camera roll." },
+      { n: 6, label: "Default",       text: "Use the app's default cover — a date tile showing when the recording was made." },
+      { n: 7, label: "Recent",        text: "Reuse the last cover image you applied. Useful when tagging several recordings from the same event." },
+      { n: 8, label: "Label",         text: "The name that appears on the recording tile in your catalog. Make it specific enough to find later." },
+      { n: 9, label: "Notes",         text: "Free-form context about the recording. Anything you type here becomes searchable in Explore." },
+      { n: 10, label: "Slides URL",   text: "Optional link to a slide deck or supporting document for this recording." },
+    ],
+    summary: "The sleeve is how your recording is found in the catalog. Label, notes, and tags are all searchable in Explore — so the words you put here determine whether you find this recording again later.\n\nTags are suggested from words in your notes. Tap a tag to select it; tap × to ignore it. When your notes contain multi-word phrases like 'product manager' or 'ai washing', tap Merge to combine adjacent words into a single tag — one meaningful phrase is far more useful than two separate words.\n\nThe cover image appears on the tile in your catalog. Pick pulls from your camera roll; Take opens the camera live. Recent lets you reuse the last image you applied — handy when you're tagging a series of recordings from the same event."
+  },
+
+  {
+    id: 16,
+    screen: "Sleeve",
+    title: "Using Merge to create phrase tags",
+    tags: ["merge", "tags", "phrases", "notes", "multi-word", "sleeve"],
+    image: "help-images/sleeve-edit-3-tags-before-merge.png",
+    callouts: [
+      { n: 1, label: "Before Merge", text: "The app tokenizes your notes into individual words — 'product', 'manager', 'ai', 'washing' appear as separate tags." },
+      { n: 2, label: "Merge button", text: "Tap Merge to combine adjacent selected words into phrases." },
+      { n: 3, label: "After Merge",  text: "Adjacent words combine into meaningful phrases: 'product manager', 'ai washing', 'gina rosenthal'. One tag, not two." },
+    ],
+    summary: "When Replay suggests tags from your notes, it starts with individual words. That works fine for single-word names, but multi-word phrases like 'product manager' or 'gina rosenthal' are much more useful as a single tag.\n\nSelect two adjacent word-tags and tap Merge. They become one phrase tag. You can merge as many pairs as you need before saving.\n\nA catalog searched with 'product manager' finds exactly what you mean. A catalog with 'product' and 'manager' as separate tags finds everything."
+  },
 ];
 
 // ── State ──────────────────────────────────────────────────────────────────
