@@ -542,6 +542,65 @@ const ARTICLES = [
     ],
     summary: "When you tap × on a tag chip, that word gets added to your Ignored Words list. It won't appear as a tag suggestion again — unless you come here and restore it. Tap the word to select it, then tap Restore to bring it back."
   },
+  {
+    id: 11,
+    screen: "Transcript",
+    title: "Transcript — Overview",
+    tags: ["transcript", "playback", "audio", "scrub", "karaoke", "share", "edit", "sleeve", "notes", "tags", "label", "cover", "index", "find", "copy", "translate"],
+    image: "help-images/transcription-screen.png",
+    callouts: [
+      { n: 1, label: "Share",            text: "Share audio, transcript text, or a complete .onda bundle — everything travels in one file" },
+      { n: 2, label: "Edit (pencil)",    text: "Edit the label, notes, cover image, tags, and album for this recording" },
+      { n: 3, label: "Progress bars",    text: "Audio and transcript stay in sync — drag either bar to scrub, both move together" },
+      { n: 4, label: "Play / Pause",     text: "Tap to play; tap again to pause. The current spoken word highlights in yellow as audio plays" },
+      { n: 5, label: "Stop",             text: "Stop playback and return to the beginning of the current position" },
+      { n: 6, label: "Rewind / Forward", text: "↺ rewinds 10 seconds · |< rewinds 2 minutes · ↻ forwards 10 seconds · >| jumps 2 minutes ahead" },
+      { n: 7, label: "Index",            text: "Your personal navigation index for this session — tap any entry to jump to that moment in the audio" },
+      { n: 8, label: "Find",             text: "Search for a word or phrase within this session" },
+      { n: 9, label: "Copy",             text: "Copy the full transcript to your clipboard" },
+      { n: 10, label: "Translate",       text: "Translate the transcript — output appears in the Edit screen" },
+      { n: 11, label: "Edit",            text: "Opens the canvas screen for editing and AI prompts" },
+    ],
+    summary: "The Transcript screen has two jobs. The top section — label, notes, tags, cover — is about how this recording is found in your catalog. The bottom section — transcript, playback, toolbar — is about finding content inside the recording. Both matter, and they work together."
+  },
+  {
+    id: 12,
+    screen: "Transcript",
+    title: "Finding this recording (sleeve)",
+    tags: ["sleeve", "label", "notes", "tags", "cover", "catalog", "search", "keywords", "album", "seo"],
+    image: "help-images/transcription-screen.png",
+    callouts: [
+      { n: 2, label: "Edit (pencil)", text: "Opens the sleeve editor — the place where you make this recording findable" },
+    ],
+    summary: "The label, notes, tags, and cover image you add here are your catalog-level keywords. When you search the Explore screen later, these are what surface this session. Think of the sleeve as the outside of the envelope — it's what the catalog sees. A good label and a few words in Notes is all it takes. The words you type become tag suggestions automatically."
+  },
+  {
+    id: 13,
+    screen: "Transcript",
+    title: "Finding content inside this recording",
+    tags: ["index", "find", "double-tap", "phrase", "navigate", "keyword", "notes", "catalog", "search"],
+    image: "help-images/transcription-screen.png",
+    callouts: [
+      { n: 7, label: "Index",  text: "Double-tap any sentence to save it here instantly. Press and hold to select an exact phrase — then tap Phrase." },
+      { n: 8, label: "Find",   text: "Search for any word or phrase — jumps to every match in the transcript" },
+    ],
+    summary: "Index entries are your personal navigation inside a session — tap any entry to jump to that moment in the audio. Double-tap a sentence for the fastest path. Press and hold to choose your exact words.\n\nHere's the insight that changes how you use the catalog: when you find something worth keeping, add that word or phrase to the session Notes. It crosses from inside the recording to the catalog level — and now it's searchable across every session in Explore. Once you know this, you'll wonder how you ever searched without it."
+  },
+  {
+    id: 14,
+    screen: "Transcript",
+    title: "Sharing a recording",
+    tags: ["share", "bundle", "onda", "audio", "transcript", "large files", "google drive", "icloud"],
+    image: "help-images/share-bundle.png",
+    callouts: [
+      { n: 1, label: "Audio",              text: "Include the audio file in the share" },
+      { n: 2, label: "Transcript text",    text: "Include the plain text transcript" },
+      { n: 3, label: "Cover image",        text: "Include the cover photo" },
+      { n: 4, label: "Send as .onda bundle", text: "One file with everything — opens in Onda Replay on any device" },
+      { n: 5, label: "Share bundle",       text: "Send via Messages, email, AirDrop, Google Drive, or any app on your device" },
+    ],
+    summary: "The .onda bundle is the recommended way to share — audio, transcript, cover, tags, label, and notes all travel together in one file. The recipient opens it in Replay and gets the full experience.\n\nFor large files (over 25MB), email and Messages may not work. Use Google Drive or iCloud Drive instead: tap Share in Replay, save to Files, then share the link from Drive."
+  },
 ];
 
 // ── State ──────────────────────────────────────────────────────────────────
