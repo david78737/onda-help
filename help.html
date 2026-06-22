@@ -416,7 +416,7 @@
 const ARTICLES = [
   {
     id: 1,
-    screen: "Recording Studio",
+    screen: "Recording",
     title: "Recording Studio — Overview",
     tags: ["recording", "studio", "timer", "teleprompter", "pause", "stop"],
     image: "help-images/record-screen-active.png",
@@ -433,19 +433,33 @@ const ARTICLES = [
   },
   {
     id: 2,
-    screen: "Recording Studio",
+    screen: "Recording",
     title: "Marking key moments while recording",
     tags: ["recording", "markers", "index", "navigate"],
     image: "help-images/mark-this-moment.png",
     callouts: [
-      { n: 1, label: "Mark this moment", text: "Drop a marker at this point in the audio — creates a named entry in your session index" },
+      { n: 1, label: "Mark this moment", text: "Drop a marker at this point in the audio — Replay stores the timestamp and keeps recording without interruption" },
       { n: 2, label: "Marker count",     text: "Shows how many moments you've marked so far in this session" },
     ],
-    summary: "Markers are forward-thinking. Tap Mark this moment while something important is being said — before you know the full shape of the session. Each marker becomes a navigable entry in the transcript index later, letting you jump directly to that point in the audio."
+    summary: "Markers are forward-thinking. Tap Mark this moment while something important is being said — before you know the full shape of the session. Replay stores the timestamp instantly and keeps going. After transcription, each marker is automatically labeled with the words spoken at that moment, creating a navigable index entry you can tap to jump directly to that point in the audio. No AI, no guessing — just the exact words that were being said."
+  },
+  {
+    id: 19,
+    screen: "Recording",
+    title: "Shaping your tags before you save",
+    tags: ["recording", "tags", "save", "merge", "customize", "manage"],
+    image: "help-images/save-tag-longpress.png",
+    callouts: [
+      { n: 1, label: "Tag chips",   text: "Words extracted automatically from your Label and Notes — each becomes a searchable tag in Explore" },
+      { n: 2, label: "× to exclude", text: "Tap × on any chip to drop that word from the tag list — your Label and Notes text is preserved exactly as written" },
+      { n: 3, label: "Merge",       text: "Tap two or more adjacent chips in sequence, then tap Merge to combine them into a single multi-word tag — ideal for proper names like 'state crimea'" },
+      { n: 4, label: "Edit",        text: "Opens a free-form editor to add, rename, or remove tags manually" },
+    ],
+    summary: "Tags are your words, not the app's. Replay extracts them from what you already wrote — your Label and Notes — so you never have to tag from scratch. Before saving, you can drop words that don't add value (×), merge adjacent words into proper names, or open Edit for full control. The note text itself is never touched."
   },
   {
     id: 3,
-    screen: "Recording Studio",
+    screen: "Recording",
     title: "Stopping a recording",
     tags: ["recording", "stop", "playback", "discard"],
     image: "help-images/record-screen-stop.png",
@@ -459,7 +473,7 @@ const ARTICLES = [
   },
   {
     id: 4,
-    screen: "Recording Studio",
+    screen: "Recording",
     title: "Naming and saving a recording",
     tags: ["recording", "save", "label", "name"],
     image: "help-images/record-screen-save.png",
@@ -473,20 +487,49 @@ const ARTICLES = [
     summary: "Every recording gets a name automatically — you never lose a session because you forgot to title it. Confirm to save instantly, or Customize to add context before it lands in your catalog."
   },
   {
+    id: 15,
+    screen: "Catalog",
+    title: "Hidden gesture — Long-press an album tile for the latest session",
+    tags: ["catalog", "album", "inspect", "hidden gestures", "long press", "navigate"],
+    image: "help-images/catalog-inspect.png",
+    callouts: [
+      { n: 1, label: "Album tile long-press", text: "Hold an album tile to open Explore focused on the most recent session in that group — skips the full album list" },
+      { n: 2, label: "Inspect card",          text: "Shows cover image, title, date, and transcript preview for the most recent session" },
+      { n: 3, label: "Pencil icon",           text: "Opens the Sleeve Editor for that session directly" },
+      { n: 4, label: "Tap to select",         text: "Tap the inspect card to open the full audio and transcript in the Transcript screen" },
+    ],
+    summary: "Tapping an album tile opens Explore to show all sessions in the group. Long-pressing it jumps straight to the most recent session — useful when you just recorded something and want to get back to it quickly without scrolling through the group."
+  },
+  {
     id: 5,
     screen: "Catalog",
     title: "Catalog — Overview",
-    tags: ["catalog", "cover", "session", "tiles"],
+    tags: ["catalog", "cover", "session", "tiles", "album", "explore", "navigate"],
     image: "help-images/catalog-screen.png",
     callouts: [
-      { n: 1, label: "ⓘ button",         text: "Opens the Information panel — version, Privacy Policy, and Help & Guide" },
-      { n: 2, label: "Photo cover card",  text: "When a cover image exists, it replaces the date tile — tap to view full screen" },
+      { n: 1, label: "ⓘ button",        text: "Opens the Information panel — version, Privacy Policy, and Help & Guide" },
+      { n: 2, label: "Individual tile",  text: "A single recording — tap to open it in Explore, then select to view the full transcript and audio" },
+      { n: 3, label: "Album tile",       text: "A group of related recordings shown as one tile with a count badge — tap to see all sessions in the group via Explore" },
+      { n: 4, label: "Count badge",      text: "How many recordings are grouped under this album tile" },
     ],
-    summary: "The Catalog is your home screen — every recording you've made or imported appears here as a tile. Color tiles show the day and time recorded. Photo tiles show a cover image you've assigned. Tap any tile to open it."
+    summary: "The Catalog is your home screen — every recording appears here as a tile. Tapping a tile opens it in Explore first, where you can preview the label, date, and transcript before selecting it to open the full audio and transcript. Album tiles group related sessions together; tap to browse all of them."
+  },
+  {
+    id: 18,
+    screen: "Cover Editor",
+    title: "Hidden gesture — Long-press a tag to favorite or ignore",
+    tags: ["sleeve", "tags", "favorite", "ignore", "hidden gestures", "long press", "manage"],
+    image: "help-images/sleeve-tag-longpress.png",
+    callouts: [
+      { n: 1, label: "Long-press tag chip", text: "Hold any tag chip in the Sleeve Editor to open the tag action sheet" },
+      { n: 2, label: "Make Favorite",       text: "Pins this tag to the top of the Explore tag list with a gold star" },
+      { n: 3, label: "Ignore",              text: "Hides this tag from the Explore screen — it stays on the session but won't appear as a lens" },
+    ],
+    summary: "Long-press any tag chip in the Sleeve Editor to favorite or ignore it. This is the same action available in Explore — you can manage your tags from wherever you happen to be working. Favorites appear at the top of the Explore tag list. Ignored tags are hidden from Explore but not deleted."
   },
   {
     id: 6,
-    screen: "Sleeve Editor",
+    screen: "Cover Editor",
     title: "Sleeve Editor — Cover and label",
     tags: ["sleeve", "cover", "label", "notes", "save", "share"],
     image: "help-images/sleeve-editor-1.png",
@@ -501,7 +544,7 @@ const ARTICLES = [
   },
   {
     id: 7,
-    screen: "Sleeve Editor",
+    screen: "Cover Editor",
     title: "Sleeve Editor — Tags",
     tags: ["sleeve", "tags", "merge", "notes", "vocabulary"],
     image: "help-images/sleeve-editor-2.png",
@@ -513,128 +556,131 @@ const ARTICLES = [
     summary: "Tags come from your own words. Type a description in Notes — the app reads it and suggests tags. You decide what sticks. Merge turns two single words into a phrase so multi-word ideas stay together as one searchable unit."
   },
   {
-    id: 8,
-    screen: "Utilities",
-    title: "Utilities — Overview",
-    tags: ["utilities", "fuel", "tank", "subscribe", "import", "share", "bundle", "contacts", "ignored words", "jerry can"],
-    image: "help-images/utilities-top.png",
+    id: 10,
+    screen: "Transcript",
+    title: "Index — Navigate your recording by topic",
+    tags: ["index", "markers", "navigate", "transcript", "search"],
+    image: "help-images/index-drawer.png",
     callouts: [
-      { n: 1, label: "Fuel gauge",       text: "Shows how many 5-hour blocks you have waiting to pour into your tank" },
-      { n: 2, label: "Tank level",       text: "Yellow shows transcription hours available & digital readout in hours" },
-      { n: 3, label: "Subscribe",        text: "A subscription will add 5 hours of transcription time / mo — opens the App Store" },
-      { n: 4, label: "Buy ONDA Fuel",    text: "Purchase 5 hours of transcription time in the App Store — opens the App Store" },
-      { n: 5, label: "Pour ONDA Fuel",   text: "Transfer your purchased hours (top left) into the tank" },
-      { n: 6, label: "Save a Post",      text: "Bookmark a social media post or URL as a session entry in your catalog" },
-      { n: 7, label: "Import Recording", text: "Import an audio file or .onda bundle from your device — supports .onda, .m4a, .mp3, .wav, .mp4, .aac, .ogg, .flac" },
-      { n: 8, label: "Share Bundle",     text: "Package the current session as a .onda file and share it — audio, transcript, and metadata travel together to local or online storage" },
-      { n: 9, label: "Ignored Words",    text: "Restore words you accidentally ignored — tap a word to select it, then tap Restore" },
+      { n: 1, label: "Index button",    text: "Opens the Index drawer — a list of navigable entries for this session" },
+      { n: 2, label: "Marker entries",  text: "Each |> entry was created by tapping 'Mark this moment' during recording — labeled with the words spoken at that instant" },
+      { n: 3, label: "Timestamp",       text: "The time in the recording where this moment occurred — tap the entry to jump there in the audio" },
+      { n: 4, label: "× button",        text: "Remove an index entry you no longer need" },
     ],
-    summary: "Utilities is your control panel for transcription fuel, importing external recordings, sharing sessions, and managing contacts and ignored words. Your free hour renews every month; subscribe for 5 hours/month; or buy a Jerry Can for a one-time 5-hour block."
+    summary: "The Index is a self-building table of contents for your recording. Entries labeled with |> were created by tapping 'Mark this moment' during capture — each one shows the actual words being spoken at that timestamp, so you can navigate by meaning, not by guessing. Tap any entry to jump directly to that moment in the audio."
+  },
+  {
+    id: 11,
+    screen: "Explore",
+    title: "Explore — Overview",
+    tags: ["explore", "tags", "catalog", "filter", "navigate", "search"],
+    image: "help-images/explore-overview.png",
+    callouts: [
+      { n: 1, label: "Back arrow",     text: "Return to the Catalog" },
+      { n: 2, label: "Pencil icon",    text: "Switch to tag-edit mode — lets you remove tags from your catalog" },
+      { n: 3, label: "Patent Pending", text: "The Explore tag-lens design is patent pending" },
+      { n: 4, label: "Help button",    text: "Opens this help guide filtered to Explore topics" },
+      { n: 5, label: "Tag panel",      text: "Every tag across all your recordings — ordered by how many sessions share them" },
+      { n: 6, label: "Count badge",    text: "How many sessions carry this tag — a higher count means a recurring theme" },
+      { n: 7, label: "Session list",   text: "All your recordings — cover image, title, date, and a transcript preview" },
+    ],
+    summary: "Explore turns your tags into a navigation system. Every word you used to describe your recordings appears as a tag on the left. The session list on the right shows all your recordings. Tap a tag to filter — the list narrows instantly to only sessions that carry it."
+  },
+  {
+    id: 12,
+    screen: "Explore",
+    title: "Filtering and narrowing by tag",
+    tags: ["explore", "tags", "filter", "narrow", "navigate", "search"],
+    image: "help-images/explore-filtered.png",
+    callouts: [
+      { n: 1, label: "Selected tag (yellow)",  text: "The active filter — only sessions with this tag appear in the list" },
+      { n: 2, label: "Related tags (teal)",    text: "Other tags that appear on the filtered sessions — tap one to narrow further" },
+      { n: 3, label: "Matched session",        text: "Sessions that share the selected tag — tap to open audio and transcript" },
+      { n: 4, label: "Highlighted session (yellow)", text: "The currently selected session — tap the pencil to edit its sleeve" },
+      { n: 5, label: "Pencil icon",            text: "Opens the Sleeve Editor for that session directly from Explore" },
+    ],
+    summary: "Tap a tag and the session list narrows to only recordings that carry it. The teal tags that appear below are the other tags shared by those sessions — tap one to narrow further. This is progressive refinement: each tap tightens the focus without a search box. Tap the active tag again to clear the filter and return to all sessions."
+  },
+  {
+    id: 13,
+    screen: "Explore",
+    title: "Tag actions — Favorite and Ignore",
+    tags: ["explore", "tags", "favorite", "ignore", "star", "manage", "hidden gestures"],
+    image: "help-images/explore-tag-actions.png",
+    callouts: [
+      { n: 1, label: "Make Favorite", text: "Pins this tag to the top of the list with a star — your most-used tags always at hand" },
+      { n: 2, label: "Ignore",        text: "Hides this tag from Explore permanently — useful for auto-generated tags you don't need" },
+    ],
+    summary: "Long-press any tag to get two options. Make Favorite pins it to the top of the tag list with a gold star — so your most important tags are always the first thing you see. Long-press a favorited tag to Remove Favorite and return it to the regular list. Ignore removes a tag from Explore entirely. To restore an ignored tag, use tag-edit mode (pencil icon) or re-add it in the Sleeve Editor."
+  },
+  {
+    id: 14,
+    screen: "Explore",
+    title: "Tag edit mode — removing tags",
+    tags: ["explore", "tags", "delete", "remove", "edit", "manage"],
+    image: "help-images/explore-edit-mode.png",
+    callouts: [
+      { n: 1, label: "Checkmark icon", text: "Tap to exit tag-edit mode and return to browsing" },
+      { n: 2, label: "Red × on tag",   text: "Tap to ignore this tag — it disappears from Explore across all sessions" },
+    ],
+    summary: "Tap the pencil icon to enter tag-edit mode. Every tag gets a red × — tap it to ignore that tag and remove it from Explore. This is a display preference, not a delete: the tag still exists on the session, it just won't appear in the tag panel. Tap the checkmark when done."
+  },
+  {
+    id: 16,
+    screen: "Transcript",
+    title: "Hidden gesture — Long-press header to open Sleeve Editor",
+    tags: ["transcript", "sleeve", "hidden gestures", "long press", "label", "cover", "notes"],
+    image: "help-images/transcript-header-longpress.png",
+    callouts: [
+      { n: 1, label: "Session header",   text: "The card at the top of the Transcript screen — long-press anywhere on it to open the Sleeve Editor" },
+      { n: 2, label: "Save / Cancel",    text: "Save commits all changes; Cancel discards them and returns to the transcript" },
+      { n: 3, label: "Take / Pick",      text: "Replace the cover image with a new photo or one from your library" },
+      { n: 4, label: "Default / Recent", text: "Reset to the auto-generated cover, or pick from recently used images" },
+      { n: 5, label: "Label / Notes",    text: "Edit the session title and description — Notes words become your searchable tags" },
+      { n: 6, label: "Re-transcribe",    text: "Delete the current transcript and run a fresh transcription on the same audio" },
+    ],
+    summary: "Long-press the session header card at the top of the Transcript screen to open the full Sleeve Editor without leaving the transcript. The same editor is available via the pencil icon — the long-press is simply a faster gesture when your hands are already on the transcript. Change the label, notes, cover image, or run a fresh transcription, then Save to return."
+  },
+  {
+    id: 17,
+    screen: "Transcript",
+    title: "Hidden gesture — Long-press an index entry to strike through",
+    tags: ["transcript", "index", "hidden gestures", "long press", "strike", "navigate"],
+    image: "help-images/index-strike.png",
+    callouts: [
+      { n: 1, label: "Long-press entry", text: "Hold an index entry to toggle a strikethrough — marks it as reviewed or done" },
+      { n: 2, label: "Struck entry",     text: "Greyed out with a line through it — stays in the list so you can still tap to navigate, just visually deprioritized" },
+      { n: 3, label: "Long-press again", text: "Removes the strikethrough and restores the entry to normal" },
+    ],
+    summary: "Long-press any entry in the Index drawer to strike it through. Useful for working through a recording methodically — strike an entry when you've dealt with it, leave the rest visible. The entry stays navigable; it's just visually marked as done. Long-press again to undo."
+  },
+  {
+    id: 8,
+    screen: "Transcript",
+    title: "Sharing — Send the transcript as text",
+    tags: ["share", "copy", "transcript", "text", "send"],
+    image: "help-images/share-copy.png",
+    callouts: [
+      { n: 1, label: "Copy",         text: "Copies the full transcript to your clipboard and opens the Android share sheet" },
+      { n: 2, label: "Share sheet",  text: "Android surfaces your most recent contacts and destinations — Gmail, Drive, Messages, and more" },
+      { n: 3, label: "Sharing text", text: "The full transcript text is ready to paste or send directly from here" },
+    ],
+    summary: "Copy is the fastest way to share. One tap copies the entire transcript and opens Android's share sheet — your recent contacts and apps appear immediately. No options, no decisions. Send to Gmail, paste into a document, or forward to anyone in seconds."
   },
   {
     id: 9,
     screen: "Utilities",
-    title: "Ignored Words",
-    tags: ["utilities", "ignored words", "tags", "filter", "restore"],
-    image: "help-images/utilities-top.png",
-    callouts: [
-      { n: 9, label: "Ignored Words", text: "Words you've told the app to skip when building tags — tap to open the list and restore any word you ignored by mistake" },
-    ],
-    summary: "When you tap × on a tag chip, that word gets added to your Ignored Words list. It won't appear as a tag suggestion again — unless you come here and restore it. Tap the word to select it, then tap Restore to bring it back."
-  },
-  {
-    id: 11,
-    screen: "Transcript",
-    title: "Transcript — Overview",
-    tags: ["transcript", "playback", "audio", "scrub", "karaoke", "share", "edit", "sleeve", "notes", "tags", "label", "cover", "index", "find", "copy", "translate"],
-    image: "help-images/transcription-screen.png",
-    callouts: [
-      { n: 1, label: "Share",            text: "Share audio, transcript text, or a complete .onda bundle — everything travels in one file" },
-      { n: 2, label: "Edit (pencil)",    text: "Edit the label, notes, cover image, tags, and album for this recording" },
-      { n: 3, label: "Progress bars",    text: "Audio and transcript stay in sync — drag either bar to scrub, both move together" },
-      { n: 4, label: "Play / Pause",     text: "Tap to play; tap again to pause. The current spoken word highlights in yellow as audio plays" },
-      { n: 5, label: "Stop",             text: "Stop playback and return to the beginning of the current position" },
-      { n: 6, label: "Rewind / Forward", text: "↺ rewinds 10 seconds · |< rewinds 2 minutes · ↻ forwards 10 seconds · >| jumps 2 minutes ahead" },
-      { n: 7, label: "Index",            text: "Your personal navigation index for this session — tap any entry to jump to that moment in the audio" },
-      { n: 8, label: "Find",             text: "Search for a word or phrase within this session" },
-      { n: 9, label: "Copy",             text: "Copy the full transcript to your clipboard" },
-      { n: 10, label: "Translate",       text: "Translate the transcript — output appears in the Edit screen" },
-      { n: 11, label: "Edit",            text: "Opens the canvas screen for editing and AI prompts" },
-    ],
-    summary: "The Transcript screen has two jobs. The top section — label, notes, tags, cover — is about how this recording is found in your catalog. The bottom section — transcript, playback, toolbar — is about finding content inside the recording. Both matter, and they work together."
-  },
-  {
-    id: 12,
-    screen: "Transcript",
-    title: "Finding this recording (sleeve)",
-    tags: ["sleeve", "label", "notes", "tags", "cover", "catalog", "search", "keywords", "album", "seo"],
-    image: "help-images/transcription-screen.png",
-    callouts: [
-      { n: 2, label: "Edit (pencil)", text: "Opens the sleeve editor — the place where you make this recording findable" },
-    ],
-    summary: "The label, notes, tags, and cover image you add here are your catalog-level keywords. When you search the Explore screen later, these are what surface this session. Think of the sleeve as the outside of the envelope — it's what the catalog sees. A good label and a few words in Notes is all it takes. The words you type become tag suggestions automatically."
-  },
-  {
-    id: 13,
-    screen: "Transcript",
-    title: "Finding content inside this recording",
-    tags: ["index", "find", "double-tap", "phrase", "navigate", "keyword", "notes", "catalog", "search"],
-    image: "help-images/transcription-screen.png",
-    callouts: [
-      { n: 7, label: "Index",  text: "Double-tap any sentence to save it here instantly. Press and hold to select an exact phrase — then tap Phrase." },
-      { n: 8, label: "Find",   text: "Search for any word or phrase — jumps to every match in the transcript" },
-    ],
-    summary: "Index entries are your personal navigation inside a session — tap any entry to jump to that moment in the audio. Double-tap a sentence for the fastest path. Press and hold to choose your exact words.\n\nHere's the insight that changes how you use the catalog: when you find something worth keeping, add that word or phrase to the session Notes. It crosses from inside the recording to the catalog level — and now it's searchable across every session in Explore. Once you know this, you'll wonder how you ever searched without it."
-  },
-  {
-    id: 14,
-    screen: "Transcript",
-    title: "Sharing a recording",
-    tags: ["share", "bundle", "onda", "audio", "transcript", "large files", "google drive", "icloud"],
+    title: "Sharing — Send the bundle (.onda)",
+    tags: ["share", "bundle", "onda", "audio", "download", "link", "publish", "utilities"],
     image: "help-images/share-bundle.png",
     callouts: [
-      { n: 1, label: "Audio",              text: "Include the audio file in the share" },
-      { n: 2, label: "Transcript text",    text: "Include the plain text transcript" },
-      { n: 3, label: "Cover image",        text: "Include the cover photo" },
-      { n: 4, label: "Send as .onda bundle", text: "One file with everything — opens in Onda Replay on any device" },
-      { n: 5, label: "Share bundle",       text: "Send via Messages, email, AirDrop, Google Drive, or any app on your device" },
+      { n: 1, label: "Share Bundle",            text: "Opens the full share options — audio, transcript, cover image, and bundle toggle" },
+      { n: 2, label: "Send as .onda bundle",     text: "Packages everything into one file — audio · transcript · cover · tags · label · notes" },
+      { n: 3, label: "File name preview",        text: "Shows exactly what the file will be named before you send it — date, time, and your recording title" },
+      { n: 4, label: "Share bundle (.onda)",     text: "Sends the bundle file — opens in Onda Replay on any device" },
+      { n: 5, label: "Get ONDA Download Link",   text: "Uploads the bundle to a secure server and copies a 7-day link — paste it into any email, chat, or QR code" },
     ],
-    summary: "The .onda bundle is the recommended way to share — audio, transcript, cover, tags, label, and notes all travel together in one file. The recipient opens it in Replay and gets the full experience.\n\nFor large files (over 25MB), email and Messages may not work. Use Google Drive or iCloud Drive instead: tap Share in Replay, save to Files, then share the link from Drive."
-  },
-
-  {
-    id: 15,
-    screen: "Sleeve",
-    title: "Editing a recording's sleeve",
-    tags: ["label", "notes", "tags", "cover", "photo", "merge", "album", "slides", "sleeve", "edit"],
-    image: "help-images/sleeve-edit-1-no-photo.png",
-    callouts: [
-      { n: 1, label: "Delete",        text: "Permanently deletes this recording. This cannot be undone." },
-      { n: 2, label: "Re-transcribe", text: "Send the audio back to Whisper for a fresh transcription. Uses transcription time from your tank." },
-      { n: 3, label: "Save",          text: "Save all changes to label, notes, tags, cover image, and album." },
-      { n: 4, label: "Take",          text: "Open the camera and take a new photo right now." },
-      { n: 5, label: "Pick",          text: "Choose an existing photo from your camera roll." },
-      { n: 6, label: "Default",       text: "Use the app's default cover — a date tile showing when the recording was made." },
-      { n: 7, label: "Recent",        text: "Reuse the last cover image you applied. Useful when tagging several recordings from the same event." },
-      { n: 8, label: "Label",         text: "The name that appears on the recording tile in your catalog. Make it specific enough to find later." },
-      { n: 9, label: "Notes",         text: "Free-form context about the recording. Anything you type here becomes searchable in Explore." },
-      { n: 10, label: "Slides URL",   text: "Optional link to a slide deck or supporting document for this recording." },
-    ],
-    summary: "The sleeve is how your recording is found in the catalog. Label, notes, and tags are all searchable in Explore — so the words you put here determine whether you find this recording again later.\n\nTags are suggested from words in your notes. Tap a tag to select it; tap × to ignore it. When your notes contain multi-word phrases like 'product manager' or 'ai washing', tap Merge to combine adjacent words into a single tag — one meaningful phrase is far more useful than two separate words.\n\nThe cover image appears on the tile in your catalog. Pick pulls from your camera roll; Take opens the camera live. Recent lets you reuse the last image you applied — handy when you're tagging a series of recordings from the same event."
-  },
-
-  {
-    id: 16,
-    screen: "Sleeve",
-    title: "Using Merge to create phrase tags",
-    tags: ["merge", "tags", "phrases", "notes", "multi-word", "sleeve"],
-    image: "help-images/sleeve-edit-3-tags-before-merge.png",
-    callouts: [
-      { n: 1, label: "Before Merge", text: "The app tokenizes your notes into individual words — 'product', 'manager', 'ai', 'washing' appear as separate tags." },
-      { n: 2, label: "Merge button", text: "Tap Merge to combine adjacent selected words into phrases." },
-      { n: 3, label: "After Merge",  text: "Adjacent words combine into meaningful phrases: 'product manager', 'ai washing', 'gina rosenthal'. One tag, not two." },
-    ],
-    summary: "When Replay suggests tags from your notes, it starts with individual words. That works fine for single-word names, but multi-word phrases like 'product manager' or 'gina rosenthal' are much more useful as a single tag.\n\nSelect two adjacent word-tags and tap Merge. They become one phrase tag. You can merge as many pairs as you need before saving.\n\nA catalog searched with 'product manager' finds exactly what you mean. A catalog with 'product' and 'manager' as separate tags finds everything."
+    summary: "The bundle is the complete record — audio, transcript, cover image, tags, and notes in one file. Share bundle sends it directly to a person or device. Get ONDA Download Link publishes it: anyone with the link can download it for 7 days. Presenters use the download link to drop their session into slides or a QR code before the audience leaves the room."
   },
 ];
 
