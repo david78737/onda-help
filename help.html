@@ -495,7 +495,7 @@ const ARTICLES = [
     callouts: [
       { n: 1, label: "Album tile long-press", text: "Hold an album tile to open Explore focused on the most recent session in that group — skips the full album list" },
       { n: 2, label: "Inspect card",          text: "Shows cover image, title, date, and transcript preview for the most recent session" },
-      { n: 3, label: "Pencil icon",           text: "Opens the Sleeve Editor for that session directly" },
+      { n: 3, label: "Pencil icon",           text: "Opens the Cover Editor for that session directly" },
       { n: 4, label: "Tap to select",         text: "Tap the inspect card to open the full audio and transcript in the Transcript screen" },
     ],
     summary: "Tapping an album tile opens Explore to show all sessions in the group. Long-pressing it jumps straight to the most recent session — useful when you just recorded something and want to get back to it quickly without scrolling through the group."
@@ -518,20 +518,20 @@ const ARTICLES = [
     id: 18,
     screen: "Cover Editor",
     title: "Hidden gesture — Long-press a tag to favorite or ignore",
-    tags: ["sleeve", "tags", "favorite", "ignore", "hidden gestures", "long press", "manage"],
+    tags: ["cover", "tags", "favorite", "ignore", "hidden gestures", "long press", "manage"],
     image: "help-images/sleeve-tag-longpress.png",
     callouts: [
-      { n: 1, label: "Long-press tag chip", text: "Hold any tag chip in the Sleeve Editor to open the tag action sheet" },
+      { n: 1, label: "Long-press tag chip", text: "Hold any tag chip in the Cover Editor to open the tag action sheet" },
       { n: 2, label: "Make Favorite",       text: "Pins this tag to the top of the Explore tag list with a gold star" },
       { n: 3, label: "Ignore",              text: "Hides this tag from the Explore screen — it stays on the session but won't appear as a lens" },
     ],
-    summary: "Long-press any tag chip in the Sleeve Editor to favorite or ignore it. This is the same action available in Explore — you can manage your tags from wherever you happen to be working. Favorites appear at the top of the Explore tag list. Ignored tags are hidden from Explore but not deleted."
+    summary: "Long-press any tag chip in the Cover Editor to favorite or ignore it. This is the same action available in Explore — you can manage your tags from wherever you happen to be working. Favorites appear at the top of the Explore tag list. Ignored tags are hidden from Explore but not deleted."
   },
   {
     id: 6,
     screen: "Cover Editor",
-    title: "Sleeve Editor — Cover and label",
-    tags: ["sleeve", "cover", "label", "notes", "save", "share"],
+    title: "Cover Editor — Cover and label",
+    tags: ["cover", "cover", "label", "notes", "save", "share"],
     image: "help-images/sleeve-editor-1.png",
     callouts: [
       { n: 1, label: "Save",      text: "Confirms label, notes, cover image, and tags — saves to catalog" },
@@ -545,8 +545,8 @@ const ARTICLES = [
   {
     id: 7,
     screen: "Cover Editor",
-    title: "Sleeve Editor — Tags",
-    tags: ["sleeve", "tags", "merge", "notes", "vocabulary"],
+    title: "Cover Editor — Tags",
+    tags: ["cover", "tags", "merge", "notes", "vocabulary"],
     image: "help-images/sleeve-editor-2.png",
     callouts: [
       { n: 1, label: "Notes → tags", text: "The words you type in Notes become tag candidates — your vocabulary, not the app's" },
@@ -596,8 +596,8 @@ const ARTICLES = [
       { n: 1, label: "Selected tag (yellow)",  text: "The active filter — only sessions with this tag appear in the list" },
       { n: 2, label: "Related tags (teal)",    text: "Other tags that appear on the filtered sessions — tap one to narrow further" },
       { n: 3, label: "Matched session",        text: "Sessions that share the selected tag — tap to open audio and transcript" },
-      { n: 4, label: "Highlighted session (yellow)", text: "The currently selected session — tap the pencil to edit its sleeve" },
-      { n: 5, label: "Pencil icon",            text: "Opens the Sleeve Editor for that session directly from Explore" },
+      { n: 4, label: "Highlighted session (yellow)", text: "The currently selected session — tap the pencil to edit its cover" },
+      { n: 5, label: "Pencil icon",            text: "Opens the Cover Editor for that session directly from Explore" },
     ],
     summary: "Tap a tag and the session list narrows to only recordings that carry it. The teal tags that appear below are the other tags shared by those sessions — tap one to narrow further. This is progressive refinement: each tap tightens the focus without a search box. Tap the active tag again to clear the filter and return to all sessions."
   },
@@ -611,7 +611,7 @@ const ARTICLES = [
       { n: 1, label: "Make Favorite", text: "Pins this tag to the top of the list with a star — your most-used tags always at hand" },
       { n: 2, label: "Ignore",        text: "Hides this tag from Explore permanently — useful for auto-generated tags you don't need" },
     ],
-    summary: "Long-press any tag to get two options. Make Favorite pins it to the top of the tag list with a gold star — so your most important tags are always the first thing you see. Long-press a favorited tag to Remove Favorite and return it to the regular list. Ignore removes a tag from Explore entirely. To restore an ignored tag, use tag-edit mode (pencil icon) or re-add it in the Sleeve Editor."
+    summary: "Long-press any tag to get two options. Make Favorite pins it to the top of the tag list with a gold star — so your most important tags are always the first thing you see. Long-press a favorited tag to Remove Favorite and return it to the regular list. Ignore removes a tag from Explore entirely. To restore an ignored tag, use tag-edit mode (pencil icon) or re-add it in the Cover Editor."
   },
   {
     id: 14,
@@ -628,18 +628,18 @@ const ARTICLES = [
   {
     id: 16,
     screen: "Transcript",
-    title: "Hidden gesture — Long-press header to open Sleeve Editor",
-    tags: ["transcript", "sleeve", "hidden gestures", "long press", "label", "cover", "notes"],
+    title: "Hidden gesture — Long-press header to open Cover Editor",
+    tags: ["transcript", "cover", "hidden gestures", "long press", "label", "cover", "notes"],
     image: "help-images/transcript-header-longpress.png",
     callouts: [
-      { n: 1, label: "Session header",   text: "The card at the top of the Transcript screen — long-press anywhere on it to open the Sleeve Editor" },
+      { n: 1, label: "Session header",   text: "The card at the top of the Transcript screen — long-press anywhere on it to open the Cover Editor" },
       { n: 2, label: "Save / Cancel",    text: "Save commits all changes; Cancel discards them and returns to the transcript" },
       { n: 3, label: "Take / Pick",      text: "Replace the cover image with a new photo or one from your library" },
       { n: 4, label: "Default / Recent", text: "Reset to the auto-generated cover, or pick from recently used images" },
       { n: 5, label: "Label / Notes",    text: "Edit the session title and description — Notes words become your searchable tags" },
       { n: 6, label: "Re-transcribe",    text: "Delete the current transcript and run a fresh transcription on the same audio" },
     ],
-    summary: "Long-press the session header card at the top of the Transcript screen to open the full Sleeve Editor without leaving the transcript. The same editor is available via the pencil icon — the long-press is simply a faster gesture when your hands are already on the transcript. Change the label, notes, cover image, or run a fresh transcription, then Save to return."
+    summary: "Long-press the session header card at the top of the Transcript screen to open the full Cover Editor without leaving the transcript. The same editor is available via the pencil icon — the long-press is simply a faster gesture when your hands are already on the transcript. Change the label, notes, cover image, or run a fresh transcription, then Save to return."
   },
   {
     id: 17,
