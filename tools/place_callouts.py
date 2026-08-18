@@ -101,7 +101,13 @@ def place_callouts(image_path, centers_pct, order, output_path):
 
     placed = []  # (label, x, y)
 
-    # 1) Row/column groups first — uniform perpendicular shift
+    # 1) Row/column groups first — uniform perpendicular shift.
+    # The shift only ever moves the group along its perpendicular axis
+    # (vertical for a row), so the *along-axis* coordinate (X for a row)
+    # is never touched by that shift — it still needs its own edge-margin
+    # check, or a row whose members sit near the left/right canvas edge
+    # (e.g. the leftmost/rightmost icon in a toolbar) will silently keep
+    # an out-of-bounds X forever, no matter how wide EDGE_MARGIN is set.
     rows = _detect_rows(order, centers_pct)
     for row in rows:
         ctr_ys = [centers_pct[m][1] / 100 * H for m in row]
@@ -112,8 +118,22 @@ def place_callouts(image_path, centers_pct, order, output_path):
                 break
         if shift is None:
             shift = -((MIN_DIST + MAX_DIST) / 2)
+
+        # Along-axis (X) correction: if the leftmost/rightmost member's
+        # original X already violates the edge margin, nudge the WHOLE
+        # row sideways by the deficit — preserves relative spacing
+        # between members instead of only moving the offending one.
+        ctr_xs = [centers_pct[m][0] / 100 * W for m in row]
+        x_shift = 0
+        left_deficit = (RADIUS + EDGE_MARGIN) - min(ctr_xs)
+        if left_deficit > 0:
+            x_shift = left_deficit
+        right_deficit = max(ctr_xs) - (W - (RADIUS + EDGE_MARGIN))
+        if right_deficit > 0:
+            x_shift = -right_deficit
+
         for m in row:
-            cx = centers_pct[m][0] / 100 * W
+            cx = centers_pct[m][0] / 100 * W + x_shift
             cy = centers_pct[m][1] / 100 * H + shift
             placed.append((m, cx, cy))
 
