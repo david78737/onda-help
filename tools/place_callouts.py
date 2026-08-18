@@ -119,21 +119,27 @@ def place_callouts(image_path, centers_pct, order, output_path):
         if shift is None:
             shift = -((MIN_DIST + MAX_DIST) / 2)
 
-        # Along-axis (X) correction: if the leftmost/rightmost member's
-        # original X already violates the edge margin, nudge the WHOLE
-        # row sideways by the deficit — preserves relative spacing
-        # between members instead of only moving the offending one.
+        # Along-axis (X) correction: a uniform SHIFT can only fix one end
+        # of the row at a time — if both the leftmost and rightmost
+        # members are simultaneously too close to their respective edges
+        # (a row whose natural width doesn't fit inside the margins at
+        # all), sliding the row sideways fixes one end and leaves the
+        # other exactly as cramped as before, breaking even spacing.
+        # Instead, scale every member's distance from the row's own
+        # center point inward by the same factor, only if needed — this
+        # compresses the row symmetrically around its middle rather than
+        # translating it, so both ends clear the margin at once and
+        # relative spacing stays proportional and even.
         ctr_xs = [centers_pct[m][0] / 100 * W for m in row]
-        x_shift = 0
-        left_deficit = (RADIUS + EDGE_MARGIN) - min(ctr_xs)
-        if left_deficit > 0:
-            x_shift = left_deficit
-        right_deficit = max(ctr_xs) - (W - (RADIUS + EDGE_MARGIN))
-        if right_deficit > 0:
-            x_shift = -right_deficit
+        row_center = (min(ctr_xs) + max(ctr_xs)) / 2
+        half_width = (max(ctr_xs) - min(ctr_xs)) / 2
+        room_left = row_center - (RADIUS + EDGE_MARGIN)
+        room_right = (W - (RADIUS + EDGE_MARGIN)) - row_center
+        available_half = min(room_left, room_right)
+        scale = 1.0 if half_width <= available_half or half_width == 0 else available_half / half_width
 
         for m in row:
-            cx = centers_pct[m][0] / 100 * W + x_shift
+            cx = row_center + (centers_pct[m][0] / 100 * W - row_center) * scale
             cy = centers_pct[m][1] / 100 * H + shift
             placed.append((m, cx, cy))
 
