@@ -52,7 +52,7 @@ from PIL import Image, ImageDraw, ImageFont
 RADIUS = 10             # fixed pixel radius of the callout circle
 MIN_DIST = 18           # closest a dot's center may sit to its control's center
 MAX_DIST = 34           # farthest it may drift and still read as "pointing at this"
-EDGE_MARGIN = 18         # closest a dot may sit to the image canvas boundary
+EDGE_MARGIN = 30         # closest a dot may sit to the image canvas boundary (widened for rounded phone-frame corners)
 MIN_DOT_SPACING = 26     # minimum center-to-center distance between any two dots
 ROW_TOLERANCE = 3        # percent — controls within this Y (or X) range count as one group
 
