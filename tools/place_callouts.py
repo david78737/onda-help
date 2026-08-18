@@ -143,15 +143,24 @@ def place_callouts(image_path, centers_pct, order, output_path):
             cy = centers_pct[m][1] / 100 * H + shift
             placed.append((m, cx, cy))
 
-    # 2) Everything else — ring search against edge margin + dot spacing
+    # 2) Everything else — ring search against edge margin + dot spacing.
+    # Try "toward the image's own center" first, before the fixed
+    # direction list — a control near any edge or corner always has
+    # the *least* room going further outward and the *most* room going
+    # toward the middle, so this is a smarter first guess than any
+    # single fixed default direction, and it's what actually fixed the
+    # two corner controls that no amount of margin-tuning could.
     for label in order:
         if any(m == label for m, _, _ in placed):
             continue
         px, py = centers_pct[label]
         ctr_x, ctr_y = px / 100 * W, py / 100 * H
+        vx, vy = (W / 2) - ctr_x, (H / 2) - ctr_y
+        vlen = math.hypot(vx, vy) or 1
+        dirs_to_try = [(vx / vlen, vy / vlen)] + DIRS
         chosen = None
         for dist in DIST_OPTIONS:
-            for dx, dy in DIRS:
+            for dx, dy in dirs_to_try:
                 cx, cy = ctr_x + dx * dist, ctr_y + dy * dist
                 if not ((RADIUS + EDGE_MARGIN) <= cx <= W - (RADIUS + EDGE_MARGIN)
                         and (RADIUS + EDGE_MARGIN) <= cy <= H - (RADIUS + EDGE_MARGIN)):
