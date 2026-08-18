@@ -49,14 +49,23 @@ adjusted, rather than adding more special-case logic for a rare corner.
 import math
 from PIL import Image, ImageDraw, ImageFont
 
+# All distance constants below were tuned by eye against 381px-wide phone-
+# mockup images. A raw device screenshot (e.g. an untouched iOS Simulator
+# capture) can be 3x that width or more — at that size these same pixel
+# offsets read as "sitting on top of the control" instead of "pointing at
+# it". So place_callouts() scales every one of them by the actual input
+# image's width relative to this reference before using them.
+REFERENCE_WIDTH = 381
+
 RADIUS = 10             # fixed pixel radius of the callout circle
 MIN_DIST = 18           # closest a dot's center may sit to its control's center
 MAX_DIST = 34           # farthest it may drift and still read as "pointing at this"
 EDGE_MARGIN = 30         # closest a dot may sit to the image canvas boundary (widened for rounded phone-frame corners)
 MIN_DOT_SPACING = 26     # minimum center-to-center distance between any two dots
-ROW_TOLERANCE = 3        # percent — controls within this Y (or X) range count as one group
+ROW_TOLERANCE = 3        # percent — controls within this Y (or X) range count as one group; resolution-independent, not scaled
 
-DIST_OPTIONS = [(MIN_DIST + MAX_DIST) / 2, MIN_DIST, MAX_DIST]
+FONT_SIZE = 13
+
 DIRS = [
     (0.707, -0.707), (0.707, 0.707), (-0.707, -0.707), (-0.707, 0.707),
     (1, 0), (-1, 0), (0, -1), (0, 1),
@@ -97,7 +106,15 @@ def place_callouts(image_path, centers_pct, order, output_path):
     W, H = im.size
     overlay = Image.new("RGBA", im.size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(overlay)
-    font = _font()
+
+    scale = W / REFERENCE_WIDTH
+    radius = RADIUS * scale
+    min_dist = MIN_DIST * scale
+    max_dist = MAX_DIST * scale
+    edge_margin = EDGE_MARGIN * scale
+    min_dot_spacing = MIN_DOT_SPACING * scale
+    dist_options = [(min_dist + max_dist) / 2, min_dist, max_dist]
+    font = _font(max(1, round(FONT_SIZE * scale)))
 
     placed = []  # (label, x, y)
 
@@ -107,17 +124,17 @@ def place_callouts(image_path, centers_pct, order, output_path):
     # is never touched by that shift — it still needs its own edge-margin
     # check, or a row whose members sit near the left/right canvas edge
     # (e.g. the leftmost/rightmost icon in a toolbar) will silently keep
-    # an out-of-bounds X forever, no matter how wide EDGE_MARGIN is set.
+    # an out-of-bounds X forever, no matter how wide edge_margin is set.
     rows = _detect_rows(order, centers_pct)
     for row in rows:
         ctr_ys = [centers_pct[m][1] / 100 * H for m in row]
         shift = None
-        for dy in (-((MIN_DIST + MAX_DIST) / 2), (MIN_DIST + MAX_DIST) / 2):
-            if all((RADIUS + EDGE_MARGIN) <= (cy + dy) <= H - (RADIUS + EDGE_MARGIN) for cy in ctr_ys):
+        for dy in (-((min_dist + max_dist) / 2), (min_dist + max_dist) / 2):
+            if all((radius + edge_margin) <= (cy + dy) <= H - (radius + edge_margin) for cy in ctr_ys):
                 shift = dy
                 break
         if shift is None:
-            shift = -((MIN_DIST + MAX_DIST) / 2)
+            shift = -((min_dist + max_dist) / 2)
 
         # Along-axis (X) correction: a uniform SHIFT can only fix one end
         # of the row at a time — if both the leftmost and rightmost
@@ -133,13 +150,13 @@ def place_callouts(image_path, centers_pct, order, output_path):
         ctr_xs = [centers_pct[m][0] / 100 * W for m in row]
         row_center = (min(ctr_xs) + max(ctr_xs)) / 2
         half_width = (max(ctr_xs) - min(ctr_xs)) / 2
-        room_left = row_center - (RADIUS + EDGE_MARGIN)
-        room_right = (W - (RADIUS + EDGE_MARGIN)) - row_center
+        room_left = row_center - (radius + edge_margin)
+        room_right = (W - (radius + edge_margin)) - row_center
         available_half = min(room_left, room_right)
-        scale = 1.0 if half_width <= available_half or half_width == 0 else available_half / half_width
+        row_scale = 1.0 if half_width <= available_half or half_width == 0 else available_half / half_width
 
         for m in row:
-            cx = row_center + (centers_pct[m][0] / 100 * W - row_center) * scale
+            cx = row_center + (centers_pct[m][0] / 100 * W - row_center) * row_scale
             cy = centers_pct[m][1] / 100 * H + shift
             placed.append((m, cx, cy))
 
@@ -159,13 +176,13 @@ def place_callouts(image_path, centers_pct, order, output_path):
         vlen = math.hypot(vx, vy) or 1
         dirs_to_try = [(vx / vlen, vy / vlen)] + DIRS
         chosen = None
-        for dist in DIST_OPTIONS:
+        for dist in dist_options:
             for dx, dy in dirs_to_try:
                 cx, cy = ctr_x + dx * dist, ctr_y + dy * dist
-                if not ((RADIUS + EDGE_MARGIN) <= cx <= W - (RADIUS + EDGE_MARGIN)
-                        and (RADIUS + EDGE_MARGIN) <= cy <= H - (RADIUS + EDGE_MARGIN)):
+                if not ((radius + edge_margin) <= cx <= W - (radius + edge_margin)
+                        and (radius + edge_margin) <= cy <= H - (radius + edge_margin)):
                     continue
-                if any(math.hypot(cx - px2, cy - py2) < MIN_DOT_SPACING for _, px2, py2 in placed):
+                if any(math.hypot(cx - px2, cy - py2) < min_dot_spacing for _, px2, py2 in placed):
                     continue
                 chosen = (cx, cy)
                 break
@@ -177,7 +194,7 @@ def place_callouts(image_path, centers_pct, order, output_path):
     placed_dict = {m: (x, y) for m, x, y in placed}
     for label in order:
         cx, cy = placed_dict[label]
-        draw.ellipse([cx - RADIUS, cy - RADIUS, cx + RADIUS, cy + RADIUS],
+        draw.ellipse([cx - radius, cy - radius, cx + radius, cy + radius],
                      fill=(0, 150, 136, 255), outline=(255, 255, 255, 255), width=2)
         bbox = draw.textbbox((0, 0), label, font=font)
         tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
