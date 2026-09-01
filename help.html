@@ -686,69 +686,69 @@ const ARTICLES = [
     id: 20,
     screen: "Storyboard",
     title: "Storyboard — Overview",
-    tags: ["storyboard", "boxcar", "sequence", "text", "image", "audio", "playback"],
+    tags: ["storyboard", "container", "sequence", "text", "image", "audio", "playback"],
     image: "help-images/storyboard-overview-annotated.png",
     callouts: [
       { n: 1,  label: "Back arrow",   text: "Exit Storyboard and return to your catalog" },
-      { n: 2,  label: "Studio / Storyboard toggle", text: "Studio switches to the plain continuous-recording mode; Storyboard (already selected) builds a sequence of boxcars instead" },
+      { n: 2,  label: "Studio / Storyboard toggle", text: "Studio switches to the plain continuous-recording mode; Storyboard (already selected) builds a sequence of containers instead" },
       { n: 3,  label: "Pencil icon",  text: "Edit this Storyboard's label, cover image, and tags" },
       { n: 4,  label: "Ideas icon",   text: "Opens this help page, filtered to the Storyboard screen" },
-      { n: 5,  label: "Restart",      text: "Jump playback back to the very first boxcar" },
+      { n: 5,  label: "Restart",      text: "Jump playback back to the very first container" },
       { n: 6,  label: "Play / Pause", text: "Play the whole Storyboard in order, or pause and resume exactly where you left off" },
       { n: 7,  label: "Stop",         text: "End playback and reset to the beginning" },
-      { n: 8,  label: "Boxcars",      text: "Each block below is one boxcar — text, image, or audio, placed in the order you added them. Tap one to select it." },
-      { n: 9,  label: "Text",         text: "Dictate or type a new text boxcar — becomes Stop while recording" },
-      { n: 10, label: "Image",        text: "Add a photo boxcar from your Photo Library or device" },
-      { n: 11, label: "Audio",        text: "Add a sound effect or music boxcar from your Sound Library" },
-      { n: 12, label: "Share text",   text: "Share just the written text from every text boxcar" },
+      { n: 8,  label: "Containers",      text: "Each block below is one container — text, image, or audio, placed in the order you added them. Tap one to select it." },
+      { n: 9,  label: "Text",         text: "Dictate or type a new text container — becomes Stop while recording" },
+      { n: 10, label: "Image",        text: "Add a photo container from your Photo Library or device" },
+      { n: 11, label: "Audio",        text: "Add a sound effect or music container from your Sound Library" },
+      { n: 12, label: "Share text",   text: "Share just the written text from every text container" },
       { n: 13, label: "Done",         text: "Finish this Storyboard — same as the back arrow, returns you to your catalog" },
     ],
-    summary: "A Storyboard is a sequence of boxcars — text, image, and audio blocks placed in order — instead of one continuous recording. Build it with the three buttons at the bottom, then use the play bar at the top to preview the whole sequence with real pause-and-resume, not just restart-from-zero."
+    summary: "A Storyboard is a sequence of containers — text, image, and audio blocks placed in order — instead of one continuous recording. Build it with the three buttons at the bottom, then use the play bar at the top to preview the whole sequence with real pause-and-resume, not just restart-from-zero."
   },
   {
     id: 21,
     screen: "Storyboard",
     title: "Storyboard — Adding Sound Effects",
-    tags: ["storyboard", "boxcar", "audio", "sound library", "import", "hidden gestures", "long press"],
+    tags: ["storyboard", "container", "audio", "sound library", "import", "hidden gestures", "long press"],
     image: "help-images/storyboard-sound-effects-annotated.png",
     callouts: [
       { n: 1, label: "Category tabs", text: "Switch between Sound Effects, Songs, Emojis, or Record — each is its own personal sound library" },
       { n: 2, label: "Import",        text: "Add a new sound to this category from your device" },
       { n: 3, label: "Preview icon",  text: "Tap to hear the sound before adding it" },
-      { n: 4, label: "Tap a sound",   text: "Adds it as a new boxcar in your Storyboard" },
+      { n: 4, label: "Tap a sound",   text: "Adds it as a new container in your Storyboard" },
       { n: 5, label: "Long-press a sound", text: "Hidden gesture — deletes it from your library. There's no separate delete icon; this is the only way." },
     ],
-    summary: "The Sound Library is your personal collection of effects, songs, and emoji sounds, organized into tabs. Import brings in a new sound from your device; Record captures one live. Tap any sound to drop it into your Storyboard as its own boxcar — tap the speaker icon first if you want to preview it."
+    summary: "The Sound Library is your personal collection of effects, songs, and emoji sounds, organized into tabs. Import brings in a new sound from your device; Record captures one live. Tap any sound to drop it into your Storyboard as its own container — tap the speaker icon first if you want to preview it."
   },
   {
     id: 22,
     screen: "Storyboard",
     title: "Storyboard — Adding Photos",
-    tags: ["storyboard", "boxcar", "image", "photo library", "import", "hidden gestures", "long press"],
+    tags: ["storyboard", "container", "image", "photo library", "import", "hidden gestures", "long press"],
     image: "help-images/storyboard-controls-for-photo-annotated.png",
     callouts: [
       { n: 1, label: "Category chips",  text: "Switch between your photo categories — tap one to browse just those photos" },
       { n: 2, label: "New category",    text: "Create a new category to organize your photos into" },
       { n: 3, label: "Import",          text: "Add a new photo to this category from your device — on a computer, you can also drag a photo straight onto this tile" },
-      { n: 4, label: "Tap a photo",     text: "Adds it as a new boxcar in your Storyboard" },
+      { n: 4, label: "Tap a photo",     text: "Adds it as a new container in your Storyboard" },
       { n: 5, label: "Long-press a photo", text: "Hidden gesture — deletes it from your library. There's no separate delete icon; this is the only way." },
       { n: 6, label: "Choose from device", text: "For a one-off photo you don't want filed into a category — picks it directly without adding it to your library" },
     ],
-    summary: "The Photo Library organizes your images into categories you name yourself. Import (or drag a photo onto that tile) adds one to the current category; tap any photo to drop it into your Storyboard as its own boxcar. Choose from device skips the library entirely for a photo you'll only use once."
+    summary: "The Photo Library organizes your images into categories you name yourself. Import (or drag a photo onto that tile) adds one to the current category; tap any photo to drop it into your Storyboard as its own container. Choose from device skips the library entirely for a photo you'll only use once."
   },
   {
     id: 23,
     screen: "Storyboard",
-    title: "Hidden gesture — Long-press a text or music boxcar to edit it",
-    tags: ["storyboard", "boxcar", "hidden gestures", "long press", "edit"],
+    title: "Hidden gesture — Long-press a text or music container to edit it",
+    tags: ["storyboard", "container", "hidden gestures", "long press", "edit"],
     image: "help-images/storyboard-edit-text-annotated.png",
     callouts: [
-      { n: 1, label: "Edit text dialog", text: "Appears after long-pressing a text or music boxcar already in your Storyboard — no pencil icon needed to trigger it" },
-      { n: 2, label: "Wording field",    text: "Change the wording (or, for a music boxcar, its label)" },
+      { n: 1, label: "Edit text dialog", text: "Appears after long-pressing a text or music container already in your Storyboard — no pencil icon needed to trigger it" },
+      { n: 2, label: "Wording field",    text: "Change the wording (or, for a music container, its label)" },
       { n: 3, label: "Cancel",           text: "Closes the dialog — no changes are made" },
       { n: 4, label: "Save",             text: "Keeps your changes and returns to the Storyboard" },
     ],
-    summary: "Text and music boxcars can be edited after the fact — long-press one already placed in your Storyboard instead of deleting and redoing it. The same long-press convention used for album tiles, tags, and headers elsewhere in the app; no dedicated pencil icon needed here."
+    summary: "Text and music containers can be edited after the fact — long-press one already placed in your Storyboard instead of deleting and redoing it. The same long-press convention used for album tiles, tags, and headers elsewhere in the app; no dedicated pencil icon needed here."
   },
 ];
 
