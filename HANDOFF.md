@@ -224,6 +224,17 @@ built using the workflow it exists to support.
   unused save of the same screenshot. Worth confirming it's safe to delete rather
   than something with its own purpose.
 
+- **`tools/callout_picker.html` is not committed to this repo.** It exists on
+  this machine (and is documented above, since it's clearly a real, finished
+  tool — self-documented, workable, referenced by its own file header) but
+  `git ls-files` confirms it has never been added to version control. Same for
+  two raw Storyboard screenshots (`help-images/storyboard add control
+  numbers.png`, `help-images/storyboard control functions.png`) and a stray
+  `.DS_Store`. **If this repo is cloned fresh on another machine, the callout
+  picker tool will be missing.** This should be committed (or deliberately
+  excluded, if there's a reason not to) rather than left as an untracked local
+  file — check with David before assuming it's safe to just add.
+
 - **No automated check that `ARTICLES` images resolve.** Because `help.html` has
   no build step, a typo'd or missing image path (like the id-19 case above) is
   silent until someone opens that specific article on the live site. If more
