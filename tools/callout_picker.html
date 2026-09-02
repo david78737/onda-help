@@ -1,0 +1,805 @@
+<!doctype html>
+<!--
+Callout Coordinate Picker — numbered callout reference
+
+Self-documented 2026-08-30 by running this exact tool on a screenshot of
+itself — the same numbered-callout convention used for every help.html
+article, applied reflexively to the tool that helps build those articles.
+
+  1. Copy Python snippet         — Copies a ready-to-paste centers_pct/order
+                                    block, in the exact shape
+                                    place_callouts.py's place_callouts()
+                                    expects, straight to the clipboard.
+  2. Copy help.html callout stub — Copies one { n, label, text: "" } array
+                                    entry per pin, pre-filled with whatever
+                                    you typed into each Label field — text
+                                    is left blank for the real,
+                                    code-verified description.
+  3. Clear all pins              — Removes every pin and resets the table,
+                                    without needing to reload the image.
+  4. Label field                 — Free-text name for a pin (e.g. "Back
+                                    arrow"). Feeds both the Python
+                                    comment and the help.html stub's
+                                    label value.
+
+Not shown above (added after the pins were placed, so it never got its own
+number): pins are draggable — pointerdown-and-drag on a placed pin to
+fine-tune its position instead of deleting and re-clicking.
+
+See project_onda_doc_workflow.md (Claude's memory, onda-replay project)
+for the fuller methodology this tool is one piece of.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Callout Coordinate Picker</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 24px;
+    background: #f4f7f6;
+    color: #132420;
+  }
+  h1 {
+    font-size: 1.3rem;
+    margin: 0 0 4px;
+  }
+  p.sub {
+    color: #54706a;
+    font-size: 0.9rem;
+    margin: 0 0 20px;
+  }
+  .layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .stage-wrap {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #d7e6e2;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    max-width: 100%;
+  }
+  #stage {
+    display: block;
+    max-width: 480px;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    cursor: crosshair;
+    user-select: none;
+  }
+  .pin {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    margin-left: -11px;
+    margin-top: -11px;
+    border-radius: 50%;
+    background: #008b82;
+    border: 2px solid #fff;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+  }
+  .pin:active {
+    cursor: grabbing;
+  }
+  .panel {
+    flex: 1;
+    min-width: 320px;
+  }
+  .drop-zone {
+    border: 2px dashed #9fb8b3;
+    border-radius: 8px;
+    padding: 32px;
+    text-align: center;
+    color: #54706a;
+    margin-bottom: 16px;
+    background: #fff;
+  }
+  .drop-zone.drag {
+    border-color: #008b82;
+    background: #eafbf8;
+  }
+  input[type="file"] { margin-top: 8px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #d7e6e2;
+  }
+  th, td {
+    padding: 6px 8px;
+    text-align: left;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #e9f1ef;
+  }
+  th {
+    background: #f1f7f6;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #54706a;
+  }
+  td.num { width: 28px; font-weight: 700; color: #056158; }
+  td input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #d7e6e2;
+    border-radius: 4px;
+    padding: 4px 6px;
+    font-size: 0.85rem;
+  }
+  td.coords { color: #54706a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  textarea.desc-input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    padding: 5px 6px;
+    border-radius: 4px;
+    border: 1px solid #d7e6e2;
+    background: #fff;
+    color: #132420;
+    min-height: 0;
+    white-space: normal;
+    resize: vertical;
+  }
+  button.del {
+    border: none;
+    background: none;
+    color: #c0392b;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+  }
+  .actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  button.primary {
+    background: #008b82;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button.secondary {
+    background: #fff;
+    color: #054d47;
+    border: 1px solid #9fb8b3;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:disabled { opacity: 0.5; cursor: default; }
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 12px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.78rem;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #d7e6e2;
+    background: #0f2422;
+    color: #eaf3f1;
+    min-height: 140px;
+    white-space: pre;
+  }
+  .prompt-template {
+    width: 100%;
+    box-sizing: border-box;
+    margin: 8px 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.76rem;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #d7e6e2;
+    background: #0f2422;
+    color: #eaf3f1;
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 50%;
+    background: #008b82;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  .step-badge.floating {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    z-index: 5;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+  }
+  .badged-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hint {
+    font-size: 0.78rem;
+    color: #86a29b;
+    margin-top: 4px;
+  }
+  .ai-load-box {
+    background: #fff;
+    border: 1px solid #d7e6e2;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    max-width: 480px;
+  }
+  .ai-load-box p { margin: 0 0 4px; font-size: 0.85rem; }
+  .ai-load-box textarea {
+    min-height: 70px;
+  }
+  details.accordion {
+    background: #fff;
+    border: 1px solid #d7e6e2;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    max-width: 700px;
+    overflow: hidden;
+  }
+  details.accordion summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: #054d47;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  details.accordion summary::-webkit-details-marker { display: none; }
+  details.accordion summary::after {
+    content: '+';
+    font-size: 1.1rem;
+    color: #008b82;
+    margin-left: 12px;
+  }
+  details.accordion[open] summary {
+    border-bottom: 1px solid #e9f1ef;
+  }
+  details.accordion[open] summary::after {
+    content: '\2212';
+  }
+  .accordion-body {
+    padding: 12px 16px 14px;
+  }
+  .accordion-body p {
+    margin: 0 0 8px;
+    font-size: 0.85rem;
+  }
+  .accordion-body p:last-child { margin-bottom: 0; }
+  .accordion-body ul, .accordion-body ol {
+    margin: 0 0 8px;
+    padding-left: 20px;
+  }
+  .accordion-body ol:last-child, .accordion-body ul:last-child { margin-bottom: 0; }
+  .accordion-body li {
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    color: #2b2b26;
+  }
+</style>
+</head>
+<body>
+
+<h1>Callout Coordinate Picker</h1>
+<p class="sub">Load a screenshot, click each control to drop a numbered pin, name it, then copy the coordinates straight into <code>place_callouts.py</code> — no more eyeballing pixel positions from a flat image.</p>
+
+<p class="hint" style="margin-bottom:16px;">Each section below expands on its own — open the ones you need and leave them open while you work through the steps.</p>
+
+<details class="accordion">
+  <summary>First things first</summary>
+  <div class="accordion-body">
+    <p>Step 3 needs an AI agent that can actually read your project's source code — not a plain chatbot in a browser tab that's only ever seen the screenshot. Claude Code, Codex, GitHub Copilot Chat, and Cursor are all examples of the right kind of tool.</p>
+    <p>As a product manager, you may have to work with the software engineers who do have access to the code to get the JSON file you need in the appropriate raw JSON format.</p>
+    <p>ONDA Docs doesn't set that part up for you — it assumes it's already installed, or you are working with the developers who can help you.</p>
+    <p>Get yourself or your technicians lined up before you get to step 3. If you don't have one of these running yet, that's the actual first thing to sort out, before anything on this page will make sense.</p>
+  </div>
+</details>
+
+<details class="accordion">
+  <summary>The architecture of a help file</summary>
+  <div class="accordion-body">
+    <p>A help file describing the location and function of controls on a page guides a user to successful completion of a given task. Creating those control locations is the first step, and it's made of four elements:</p>
+    <ol>
+      <li><strong>An image</strong> of the page or screen — provided by the product manager.</li>
+      <li><strong>A numbered pin</strong> next to each control — identified by the AI agent.</li>
+      <li><strong>A label</strong> for the control — created by the AI agent.</li>
+      <li><strong>Text</strong> describing what the control does — created by the AI agent.</li>
+    </ol>
+    <p>Elements 2, 3, and 4 are put into one coded object for each pin — a little bundle of <code>{ pin number, label, description }</code>. Every one of those objects goes into an array that holds every pin's location, label, and description for the whole screen. That array becomes part of one HTML file.</p>
+    <p>The image and that HTML file together are what control everything the help screen actually shows: where the pins sit, what they're called, and what they do.</p>
+    <p>The help file lives separately from the app itself, so it can be changed — in part or in whole — as the app evolves over time, without ever touching the app's own code.</p>
+  </div>
+</details>
+
+<details class="accordion">
+  <summary>Documenting a screen for the first time</summary>
+  <div class="accordion-body">
+    <ol>
+      <li><strong>Element 1, the image:</strong> take a screenshot of the screen you want to document. Save it anywhere as a PNG or JPG — you'll pick it in step 2.</li>
+      <li>Load it here with "Choose a file," or drag it straight onto the box below.</li>
+      <li>
+        <strong>Elements 2, 3, and 4 — this is the step that does the real work.</strong> Open a chat with your AI agent (Claude Code, Codex, etc. — something with access to the actual source code) and ask it something close to this, filling in your own screen name and file path:
+        <pre class="prompt-template" id="promptTemplate">This is a screenshot of the [screen/page name] screen in [app name]:
+[paste the full file path to your screenshot here]
+
+Please look at the real source code for this screen and identify every
+visible control on it — buttons, icons, toggles, fields, anything a user
+can tap or click. For each one, read the code to find out exactly what it
+does. Don't guess — if you're not sure, say so instead of making it up.
+
+Then give me back a plain JSON list, one entry per control, in exactly
+this shape:
+
+[
+  { "label": "Back arrow", "text": "Exits and returns to your catalog", "x": 12.4, "y": 6.9 },
+  { "label": "Pencil icon", "text": "Edit this Storyboard's label, cover image, and tags", "x": 87.2, "y": 6.9 }
+]
+
+"x" and "y" are your best estimate of where each control sits in the
+screenshot, as a percentage of its width and height (0 = left/top edge,
+100 = right/bottom edge).</pre>
+        <button class="secondary" id="copyPromptBtn" type="button">Copy this prompt</button>
+        <p class="hint" style="margin-top:8px;">Paste whatever it gives back into "Load AI-generated pins" below and click Load. Every pin appears already placed. First time through, read what it produces closely — after two or three screens this becomes automatic.</p>
+      </li>
+      <li>If any pin is crowding another one, or isn't quite on its control, long-press it and drag it to the right spot. <strong>Expect to do this</strong> — AI won't place every pin perfectly, and your own eyes will always be more accurate than its first guess. This step isn't a sign something went wrong.</li>
+      <li>Click <strong>Copy Python snippet</strong> — this draws the numbered pins permanently onto the image itself.</li>
+      <li>Click <strong>Copy help.html callout stub</strong> — this turns each pin into its coded object, and bundles all of them into the array that becomes part of the HTML artifact.</li>
+      <li>Move to the next screen and repeat.</li>
+    </ol>
+    <p class="hint">No AI agent handy, or want to place pins yourself instead? Skip step 3 and just click directly on the picture — each click drops the next pin, and you type its name and description yourself.</p>
+  </div>
+</details>
+
+<details class="accordion">
+  <summary>Updating an existing help article (a screen changed)</summary>
+  <div class="accordion-body">
+    <ol>
+      <li>Open <code>help.html</code>, find the article for that screen, and copy everything inside its <code>callouts: [ ... ]</code> list.</li>
+      <li>Take a brand new screenshot of the screen as it looks today. <strong>Never reuse the old <code>-annotated.png</code> file</strong> — see "Where do screenshot files come from?" below for why.</li>
+      <li>Use the same prompt template from "Documenting a screen for the first time" above, with one addition: paste in the old <code>callouts</code> text too, and add a line asking it to reuse each description for anything that still works the same way, and only write a new one for anything that actually changed.</li>
+      <li>Load the new screenshot here, then paste what the AI gives you into "Load AI-generated pins" and click Load.</li>
+      <li>Drag any pin that needs fine-tuning — expect to do this; your own eyes will always place a pin more accurately than the AI's first guess.</li>
+      <li>Copy the Python snippet and the help.html stub, same as above.</li>
+    </ol>
+    <p class="hint">Prefer to place pins yourself instead of trusting the AI's guessed positions? Use "Updating an existing screen" below — it queues up just the old names and descriptions, and you click the new screenshot once per pin to place it yourself.</p>
+  </div>
+</details>
+
+<details class="accordion">
+  <summary>Pasting the AI's answer failed — now what?</summary>
+  <div class="accordion-body">
+    <p>"Load AI-generated pins" only understands one thing: a plain list, in square brackets, like <code>[{...}, {...}]</code>. Some AI agents hand that back exactly as asked. Others wrap it in a sentence first ("Here's the list you asked for:") or fence it off in a code block (three backticks, then <code>json</code>, then the list, then three more backticks) — and if you paste that in as-is, you'll get an error instead of your pins.</p>
+    <p>The fix: before pasting, delete everything except the list itself — it should start with <code>[</code> and end with <code>]</code>, nothing before or after. If your AI agent used a code fence, delete the ```` ```json ```` line at the top and the ```` ``` ```` line at the bottom too.</p>
+  </div>
+</details>
+
+<details class="accordion">
+  <summary>What's a "callout," and where do these live?</summary>
+  <div class="accordion-body">
+    <p>A callout is one row of a help article — a number, a short name, and a sentence saying what that thing does. Example: <strong>① Back arrow — Exits and returns to your catalog.</strong> That's it — that's a callout.</p>
+    <p>All of them live in one file: <code>onda-help/help.html</code>. Inside it is one long list called <code>ARTICLES</code>. Each help topic (like "Storyboard — Overview") is one block in that list, and inside that block is a smaller list called <code>callouts</code> — that's the exact part you'd copy out.</p>
+    <p>To find the one you want: open <code>help.html</code> in a text editor, search for the screen's name (e.g. "Storyboard"), and copy everything between the square brackets after <code>callouts:</code>. That's what goes in the Import box below.</p>
+  </div>
+</details>
+
+<details class="accordion">
+  <summary>Where do screenshot files come from?</summary>
+  <div class="accordion-body">
+    <p>A screenshot here is just a regular picture file — the same kind you get from a screenshot key combo, or Snagit, or any screen-capture tool on your Mac. Nothing special about it.</p>
+    <p>"Choose a file" just opens the normal file-picker window — the same one you'd see attaching a photo to an email. You browse to wherever you saved the screenshot and click it. This tool doesn't care where that is.</p>
+    <p>One thing worth doing anyway: since the finished, annotated image eventually needs to live in <code>onda-help/help-images/</code> for the real help website to use it, it saves a step to save your screenshot straight into that folder in the first place, rather than somewhere temporary you'd have to move it from later.</p>
+    <p><strong>Important if you're updating a screen that already has help content:</strong> that folder will already have an old, annotated version of this screen sitting in it — a filename ending in <code>-annotated.png</code>, with the old numbered circles already drawn on it. <strong>Don't load that one.</strong> It's a picture of the old layout, and feeding it back into this tool would draw a second set of numbers right on top of the first. Take a brand new screenshot of the screen as it looks today, and load that instead — the old file is only useful for one thing: copying its <code>callouts</code> text out of <code>help.html</code> to paste into the Import box below, so the old descriptions carry over.</p>
+  </div>
+</details>
+
+<details class="accordion">
+  <summary>What do the three buttons at the bottom do?</summary>
+  <div class="accordion-body">
+    <ul>
+      <li><strong>Copy Python snippet</strong> — Copies the exact spots you clicked, so a computer program can draw the numbered circles for you.</li>
+      <li><strong>Copy help.html callout stub</strong> — Makes a list with the name of each pin already filled in. Each one also has a spot called <code>text</code> — that's the explanation of what the button actually does. If you imported an old description for that pin, it carries over automatically. If a pin says "needs description" in the table, this tool doesn't know that part yet — you fill it in yourself after checking the real code.</li>
+      <li><strong>Clear all pins</strong> — Erases every pin so you can start over.</li>
+    </ul>
+  </div>
+</details>
+
+<details class="accordion">
+  <summary>Updating an existing screen (a control moved, or the screen changed)?</summary>
+  <div class="accordion-body">
+    <p>Paste the old <code>callouts</code> list from <code>help.html</code> below and hit Import (see "What's a callout" above if you're not sure where to find that). Each one waits in a queue with its old name and old description already attached — nothing typed twice. Then click the new screenshot once per pin, in order, to drop it where that control actually is now. Anything that didn't move just gets clicked right back where it already was.</p>
+    <textarea id="importInput" style="min-height:70px;" placeholder='{ n: 1, label: &quot;Back arrow&quot;, text: &quot;Exit Storyboard and return to your catalog&quot; },
+{ n: 2, label: &quot;Pencil icon&quot;, text: &quot;Edit this Storyboard&#39;s label, cover image, and tags&quot; },'></textarea>
+    <div class="actions" style="margin-top:8px;">
+      <button class="secondary" id="importBtn">Import these callouts</button>
+    </div>
+    <p class="hint" id="queueStatus"></p>
+  </div>
+</details>
+
+<div class="layout">
+  <div>
+    <div class="drop-zone" id="dropZone">
+      <span class="step-badge" title="Step 2">2</span>Drag a screenshot here, or
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
+    <div class="stage-wrap" id="stageWrap" style="display:none;">
+      <span class="step-badge floating" title="Step 4">4</span>
+      <img id="stage" alt="screenshot">
+      <div id="pins"></div>
+    </div>
+    <p class="hint" id="dimHint"></p>
+
+    <div class="ai-load-box">
+      <p><span class="step-badge" title="Step 3">3</span><strong>Load AI-generated pins</strong></p>
+      <p class="hint" style="margin-bottom:6px;">Give your AI agent the screenshot and ask it to generate the pins for this screen. Paste what it gives you here — a list like <code>[{"label": "Back arrow", "text": "Exits and returns to your catalog", "x": 12.4, "y": 6.9}]</code>, one entry per pin, <code>x</code>/<code>y</code> as percent across the image (0 = left/top edge, 100 = right/bottom edge). Load a screenshot above first.</p>
+      <textarea id="aiLoadInput" style="min-height:70px;"></textarea>
+      <div class="actions" style="margin-top:8px;">
+        <button class="secondary" id="aiLoadBtn">Load AI-generated pins</button>
+      </div>
+      <p class="hint" id="aiLoadStatus"></p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <table>
+      <thead>
+        <tr><th>#</th><th>Label &amp; description</th><th>x%, y%</th><th></th></tr>
+      </thead>
+      <tbody id="pinRows">
+        <tr><td colspan="4" style="color:#86a29b;">No pins yet — click the image to add one.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="actions">
+      <span class="badged-row"><span class="step-badge" title="Step 5" style="margin-right:0;">5</span><button class="primary" id="exportPy" disabled title="Copies a centers_pct/order block, ready to paste into place_callouts.py">Copy Python snippet</button></span>
+      <span class="badged-row"><span class="step-badge" title="Step 6" style="margin-right:0;">6</span><button class="secondary" id="exportJs" disabled title="Copies one { n, label, text: &quot;&quot; } entry per pin, for pasting into help.html's ARTICLES array">Copy help.html callout stub</button></span>
+      <button class="secondary" id="clearAll" disabled title="Removes every pin so you can start over on this image">Clear all pins</button>
+    </div>
+
+    <textarea id="output" readonly placeholder="Exported coordinates will appear here."></textarea>
+  </div>
+</div>
+
+<script>
+(function () {
+  const dropZone = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const stageWrap = document.getElementById('stageWrap');
+  const stage = document.getElementById('stage');
+  const pinsLayer = document.getElementById('pins');
+  const pinRows = document.getElementById('pinRows');
+  const output = document.getElementById('output');
+  const dimHint = document.getElementById('dimHint');
+  const exportPyBtn = document.getElementById('exportPy');
+  const exportJsBtn = document.getElementById('exportJs');
+  const clearAllBtn = document.getElementById('clearAll');
+  const importInput = document.getElementById('importInput');
+  const importBtn = document.getElementById('importBtn');
+  const queueStatus = document.getElementById('queueStatus');
+  const aiLoadInput = document.getElementById('aiLoadInput');
+  const aiLoadBtn = document.getElementById('aiLoadBtn');
+  const aiLoadStatus = document.getElementById('aiLoadStatus');
+  const promptTemplate = document.getElementById('promptTemplate');
+  const copyPromptBtn = document.getElementById('copyPromptBtn');
+
+  copyPromptBtn.addEventListener('click', () => {
+    const text = promptTemplate.textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).catch(() => {});
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+    const original = copyPromptBtn.textContent;
+    copyPromptBtn.textContent = 'Copied!';
+    setTimeout(() => { copyPromptBtn.textContent = original; }, 1500);
+  });
+
+  let pins = []; // {n, xPct, yPct, label, text}
+  let pendingQueue = []; // {label, text} — imported, waiting for a click to place them
+  let naturalW = 0, naturalH = 0;
+
+  function parseImportedCallouts(raw) {
+    const blocks = raw.match(/\{[^{}]*\}/g) || [];
+    const unescape = (s) => s.replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+    const items = [];
+    for (const block of blocks) {
+      const labelMatch = block.match(/label\s*:\s*"((?:[^"\\]|\\.)*)"/);
+      const textMatch = block.match(/text\s*:\s*"((?:[^"\\]|\\.)*)"/);
+      if (!labelMatch) continue;
+      items.push({
+        label: unescape(labelMatch[1]),
+        text: textMatch ? unescape(textMatch[1]) : '',
+      });
+    }
+    return items;
+  }
+
+  importBtn.addEventListener('click', () => {
+    const items = parseImportedCallouts(importInput.value);
+    if (items.length === 0) {
+      queueStatus.textContent = "Couldn't find any { label: \"...\" } entries in that text — paste the callouts array as it appears in help.html.";
+      return;
+    }
+    pendingQueue.push(...items);
+    importInput.value = '';
+    renderQueueStatus();
+  });
+
+  aiLoadBtn.addEventListener('click', () => {
+    if (naturalW === 0) {
+      aiLoadStatus.textContent = 'Load a screenshot above first — pin positions need an image to sit on.';
+      return;
+    }
+    let data;
+    try {
+      data = JSON.parse(aiLoadInput.value);
+    } catch (e) {
+      aiLoadStatus.textContent = "Couldn't read that as a list — check it's valid JSON, like [{...}, {...}].";
+      return;
+    }
+    if (!Array.isArray(data)) {
+      aiLoadStatus.textContent = 'Expected a list of pins in square brackets, e.g. [{...}, {...}].';
+      return;
+    }
+    let added = 0, skipped = 0;
+    data.forEach(item => {
+      const x = Number(item.x), y = Number(item.y);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) { skipped++; return; }
+      pins.push({
+        n: pins.length + 1,
+        xPct: Math.max(0, Math.min(100, x)),
+        yPct: Math.max(0, Math.min(100, y)),
+        label: item.label || '',
+        text: item.text || '',
+      });
+      added++;
+    });
+    renumber();
+    renderPins();
+    aiLoadInput.value = '';
+    aiLoadStatus.textContent = skipped > 0
+      ? `Loaded ${added} pin(s) — skipped ${skipped} with no valid x/y.`
+      : `Loaded ${added} pin(s). Drag any that need fine-tuning.`;
+  });
+
+  function renderQueueStatus() {
+    if (pendingQueue.length === 0) {
+      queueStatus.textContent = '';
+    } else {
+      queueStatus.textContent = `${pendingQueue.length} waiting to be placed. Next: click the image where "${pendingQueue[0].label}" actually is now.`;
+    }
+  }
+
+  function loadFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      stage.src = e.target.result;
+      stage.onload = () => {
+        naturalW = stage.naturalWidth;
+        naturalH = stage.naturalHeight;
+        dimHint.textContent = `Image: ${naturalW} × ${naturalH}px`;
+        stageWrap.style.display = 'inline-block';
+        dropZone.style.display = 'none';
+        pins = [];
+        renderPins();
+      };
+    };
+    reader.readAsDataURL(file);
+  }
+
+  fileInput.addEventListener('change', (e) => loadFile(e.target.files[0]));
+
+  ['dragover', 'dragenter'].forEach(evt =>
+    dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.add('drag'); })
+  );
+  ['dragleave', 'drop'].forEach(evt =>
+    dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.remove('drag'); })
+  );
+  dropZone.addEventListener('drop', (e) => {
+    const file = e.dataTransfer.files && e.dataTransfer.files[0];
+    loadFile(file);
+  });
+
+  stage.addEventListener('click', (e) => {
+    const rect = stage.getBoundingClientRect();
+    const xPct = ((e.clientX - rect.left) / rect.width) * 100;
+    const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+    const n = pins.length + 1;
+    const next = pendingQueue.shift();
+    pins.push({ n, xPct, yPct, label: next ? next.label : '', text: next ? next.text : '' });
+    renderQueueStatus();
+    renderPins();
+  });
+
+  function startDrag(e, i, dot) {
+    e.preventDefault();
+    e.stopPropagation();
+    dot.setPointerCapture(e.pointerId);
+
+    function move(ev) {
+      const rect = stage.getBoundingClientRect();
+      let xPct = ((ev.clientX - rect.left) / rect.width) * 100;
+      let yPct = ((ev.clientY - rect.top) / rect.height) * 100;
+      xPct = Math.max(0, Math.min(100, xPct));
+      yPct = Math.max(0, Math.min(100, yPct));
+      pins[i].xPct = xPct;
+      pins[i].yPct = yPct;
+      dot.style.left = xPct + '%';
+      dot.style.top = yPct + '%';
+      updateCoordsCell(i);
+    }
+    function up() {
+      dot.removeEventListener('pointermove', move);
+      dot.removeEventListener('pointerup', up);
+    }
+    dot.addEventListener('pointermove', move);
+    dot.addEventListener('pointerup', up);
+  }
+
+  function updateCoordsCell(i) {
+    const row = pinRows.children[i];
+    if (!row) return;
+    const cell = row.querySelector('.coords');
+    if (cell) cell.textContent = `${pins[i].xPct.toFixed(1)}, ${pins[i].yPct.toFixed(1)}`;
+  }
+
+  function renumber() {
+    pins.forEach((p, i) => p.n = i + 1);
+  }
+
+  function removePin(index) {
+    pins.splice(index, 1);
+    renumber();
+    renderPins();
+  }
+
+  function renderPins() {
+    // Overlay dots
+    pinsLayer.innerHTML = '';
+    pins.forEach((p, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'pin';
+      dot.style.left = p.xPct + '%';
+      dot.style.top = p.yPct + '%';
+      dot.textContent = p.n;
+      dot.title = 'Drag to reposition';
+      dot.addEventListener('pointerdown', (e) => startDrag(e, i, dot));
+      pinsLayer.appendChild(dot);
+    });
+
+    // Table rows
+    if (pins.length === 0) {
+      pinRows.innerHTML = '<tr><td colspan="4" style="color:#86a29b;">No pins yet — click the image to add one.</td></tr>';
+    } else {
+      pinRows.innerHTML = '';
+      pins.forEach((p, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="num">${p.n}</td>
+          <td>
+            <input type="text" data-label-i="${i}" value="${p.label.replace(/"/g, '&quot;')}" placeholder="e.g. Back arrow">
+            <textarea class="desc-input" data-text-i="${i}" rows="2" placeholder="What does this do? e.g. Exits and returns to your catalog">${p.text.replace(/</g, '&lt;')}</textarea>
+          </td>
+          <td class="coords">${p.xPct.toFixed(1)}, ${p.yPct.toFixed(1)}</td>
+          <td><button class="del" data-del="${i}" title="Remove">✕</button></td>
+        `;
+        pinRows.appendChild(tr);
+      });
+    }
+
+    const hasPins = pins.length > 0;
+    exportPyBtn.disabled = !hasPins;
+    exportJsBtn.disabled = !hasPins;
+    clearAllBtn.disabled = !hasPins;
+
+    pinRows.querySelectorAll('input[data-label-i]').forEach(inp => {
+      inp.addEventListener('input', (e) => {
+        pins[+e.target.dataset.labelI].label = e.target.value;
+      });
+    });
+    pinRows.querySelectorAll('textarea[data-text-i]').forEach(ta => {
+      ta.addEventListener('input', (e) => {
+        pins[+e.target.dataset.textI].text = e.target.value;
+      });
+    });
+    pinRows.querySelectorAll('button[data-del]').forEach(btn => {
+      btn.addEventListener('click', (e) => removePin(+e.target.dataset.del));
+    });
+  }
+
+  clearAllBtn.addEventListener('click', () => {
+    // Placed pins go back to the front of the queue (label + text intact)
+    // rather than being discarded — "start over" shouldn't mean re-pasting
+    // the import.
+    pendingQueue = pins.map(p => ({ label: p.label, text: p.text })).concat(pendingQueue);
+    pins = [];
+    renderQueueStatus();
+    renderPins();
+  });
+
+  function copyToOutput(text) {
+    output.value = text;
+    output.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    if (navigator.clipboard) navigator.clipboard.writeText(text).catch(() => {});
+  }
+
+  exportPyBtn.addEventListener('click', () => {
+    const lines = [];
+    lines.push(`W, H = ${naturalW}, ${naturalH}`);
+    lines.push(`def pct(x, y):`);
+    lines.push(`    return (x / W * 100, y / H * 100)`);
+    lines.push('');
+    lines.push('centers_pct = {');
+    pins.forEach(p => {
+      const comment = p.label ? `  # ${p.label}` : '';
+      lines.push(`    '${p.n}': (${p.xPct.toFixed(2)}, ${p.yPct.toFixed(2)}),${comment}`);
+    });
+    lines.push('}');
+    lines.push(`order = [${pins.map(p => `'${p.n}'`).join(', ')}]`);
+    copyToOutput(lines.join('\n'));
+  });
+
+  exportJsBtn.addEventListener('click', () => {
+    const esc = (s) => s.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    const lines = pins.map(p => {
+      const label = p.label || `Control ${p.n}`;
+      const text = p.text || '';
+      return `      { n: ${p.n}, label: "${esc(label)}", text: "${esc(text)}" },`;
+    });
+    copyToOutput(lines.join('\n'));
+  });
+})();
+</script>
+
+</body>
+</html>
