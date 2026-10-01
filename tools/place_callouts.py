@@ -46,7 +46,9 @@ cases. David's call: this is fine — a human reviewer flags it via
 adjusted, rather than adding more special-case logic for a rare corner.
 """
 
+import json
 import math
+import os
 from PIL import Image, ImageDraw, ImageFont
 
 # All distance constants below were tuned by eye against 381px-wide phone-
@@ -95,12 +97,23 @@ def _detect_rows(order, centers_pct):
     return rows
 
 
-def place_callouts(image_path, centers_pct, order, output_path):
+def place_callouts(image_path, centers_pct, order, output_path, descriptions=None):
     """
-    image_path:   source screenshot
-    centers_pct:  {label: (x_percent, y_percent)} — one center point per control
-    order:        list of labels, drawing/priority order (also numbering order)
-    output_path:  where to save the annotated PNG
+    image_path:    source screenshot
+    centers_pct:   {label: (x_percent, y_percent)} — one center point per control
+    order:         list of labels, drawing/priority order (also numbering order)
+    output_path:   where to save the annotated PNG
+    descriptions:  optional {label: "what this control does"} — saved into the
+                    sidecar JSON alongside the image. This is the structured
+                    source data behind the flattened PNG: once the app's UI
+                    morphs into a later version, a new screenshot still needs
+                    new positions, but a control whose behavior hasn't changed
+                    doesn't need its description rewritten from scratch — this
+                    file is what makes that reuse possible instead of having
+                    to redo the whole identification pass by eye every time.
+                    David, 2026-10-01: flattening the image for the tile was
+                    always necessary, but discarding the structured data that
+                    produced it wasn't — nothing before this saved it anywhere.
     """
     im = Image.open(image_path).convert("RGBA")
     W, H = im.size
@@ -202,6 +215,27 @@ def place_callouts(image_path, centers_pct, order, output_path):
 
     out = Image.alpha_composite(im, overlay).convert("RGB")
     out.save(output_path)
+
+    # Sidecar JSON — the structured source data behind this flattened image.
+    # Original percentage positions are kept (not the collision-adjusted dot
+    # placement) since those are what a future re-run against a new
+    # screenshot actually needs to reuse or compare against.
+    sidecar = {
+        "source_image": os.path.basename(image_path),
+        "output_image": os.path.basename(output_path),
+        "order": order,
+        "controls": {
+            label: {
+                "position_pct": list(centers_pct[label]),
+                "description": (descriptions or {}).get(label, ""),
+            }
+            for label in order
+        },
+    }
+    sidecar_path = os.path.splitext(output_path)[0] + ".json"
+    with open(sidecar_path, "w") as f:
+        json.dump(sidecar, f, indent=2)
+
     return output_path
 
 
